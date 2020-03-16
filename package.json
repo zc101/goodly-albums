@@ -1,25 +1,28 @@
 {
-  "name": "imp-next",
+  "name": "cit495-project",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "install": "npm install next react react-dom serverless-mysql sql-template-strings isomorphic-unfetch",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next",
-    "build": "next build",
-    "start": "next start"
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "expressjs": "^1.0.1",
+    "next": "^9.3.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   },
-  "author": "",
-  "license": "MIT",
-  "dependencies": {},
   "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zc101/cit495-project.git"
   },
+  "author": "",
+  "license": "MPL",
   "bugs": {
     "url": "https://github.com/zc101/cit495-project/issues"
   },
-  "homepage": "https://github.com/zc101/cit495-project#readme",
-  "description": ""
+  "homepage": "https://github.com/zc101/cit495-project#readme"
 }
