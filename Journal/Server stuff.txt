@@ -1,8 +1,0 @@
-git clone https://github.com/mkorthof/freenom-script.git
-
-73.3.121.145
-blipmail.ml
-glitchmail.ml
-caldwellfam.cf
-
-https://www.vmock.com/byui
