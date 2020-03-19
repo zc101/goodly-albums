@@ -1,0 +1,95 @@
+/* Header, Nav, Footer small-size CSS */
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 40px;
+  text-align: left;
+  background-color: #2a2d34;
+  color: #f2efe9;
+  z-index: 1;
+}
+
+#site-title {
+  padding: 5px;
+  font-size: 27px;
+  font-family: 'Great Vibes', cursive;
+}
+
+#hamburger {
+  position: absolute;
+  right: 0;
+  fill: #f2efe9;
+}
+
+#hamburger:hover,
+#hamburger:focus {
+  fill: #ffffff;
+}
+
+nav {
+  position: fixed;
+  top: 40px;
+  width: 100%;
+  background-color: #3a3d44;
+  color: #f2efe9;
+  z-index: 1;
+}
+
+.navlist {
+  display: none;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  list-style: none;
+  width: 100%;
+  padding: 2px;
+  margin: 0px;
+}
+
+.navlist.responsive {
+  display: flex;
+}
+
+.navlist li {
+  flex: 1 100%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  height: 27px;
+}
+
+.navlist a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+.navlist a:hover,
+.navlist a:focus {
+    background-color: #f2efe9;
+    color: #3a3d44;
+}
+
+.content {
+  position: absolute;
+  top: 40px;
+}
+
+main {
+  background-color: white;
+  color: #2a2d34;
+  z-index: 0;
+}
+
+footer {
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  background-color: #2a2d34;
+  color: #f2efe9;
+}

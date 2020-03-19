@@ -1,0 +1,26 @@
+/* Header, Nav, Footer large-size CSS */
+
+@media only screen and (min-width: 600px) {
+  header {
+    text-align: center;
+  }
+
+  #hamburger {
+    display: none;
+  }
+
+  .navlist {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  .navlist li {
+    flex: 1 1;
+    font-size: 20px;
+    height: 30px;
+  }
+
+  .content {
+    top: 70px;
+  }
+}
