@@ -34,12 +34,12 @@ function bumpVisitors(ip, cb) {
         }
 
         try {
-          db.query(qUpdate, function (err, results, fields) {
+          connection.query(qUpdate, function (err, results, fields) {
             if (err) throw err;
-            db.query(qVisitors, function (err, results, fields) {
+            connection.query(qVisitors, function (err, results, fields) {
               if (err) throw err;
               let unique_visitors = results[0].unique_visitors;
-              db.query(qVisits, function (err, results, fields) {
+              connection.query(qVisits, function (err, results, fields) {
                 if (err) throw err;
                 let vals = {
                   visitors: unique_visitors
