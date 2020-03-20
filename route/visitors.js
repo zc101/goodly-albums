@@ -1,6 +1,6 @@
 // Visitor counter
 
-const db = require('/lib/db');
+const db = require('../lib/db');
 
 function bumpVisitors(ip, cb) {
   if (ip) {
@@ -77,7 +77,7 @@ function bumpVisitors(ip, cb) {
 module.exports = function (req, res) {
   bumpVisitors(req.ip, function(vals) {
     if(vals)
-      res.send('This site has been viewed ' + vals.visits + ' times by ' + vals.visitors ' visitors.');
+      res.send('This site has been viewed ' + vals.visits + ' times by ' + vals.visitors + ' visitors.');
     else
       res.status(400).send();
   });

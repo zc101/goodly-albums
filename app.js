@@ -12,7 +12,7 @@ app.set('trust proxy', 'loopback');
 app.use(cookieParser());
 
 // Load routes
-app.get('/visitors', require('route/visitors'));
+app.get('/visitors', require('./route/visitors'));
 
 // Not-found handler
 // Express doesn't consider not-found an error condition (see issues/2718), so use non-err signature
