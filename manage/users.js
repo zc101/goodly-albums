@@ -1,10 +1,10 @@
-// User ID retrieval, username checking/validation, etc. utils
+// User ID retrieval, username checking/validation, etc. functionality
 
 'use strict';
 const assert = require('assert').strict;
 const conf = require('./config');
 const db = require('./db');
-const pwutils = require('./pwutils');
+const pwmgr = require('./passwords');
 
 // Check if a username matches the configured format
 function isValidUsername(username) {
@@ -35,7 +35,7 @@ async function getUserID(username) {
 // Adds a new user and returns the user ID, or null on failure
 // Can optionally pass in a specific userID to use
 async function addUser(username, password, userID) {
-  if (isValidUsername(username) && pwutils.isValidPassword(password)) {
+  if (isValidUsername(username) && pwmgr.isValidPassword(password)) {
     let existingID = await getUserID(username);
     if (existingID !== null) {
       console.error('addUser: username "' + username + '" already exists under ID ' + String(existingID));
@@ -53,8 +53,8 @@ async function addUser(username, password, userID) {
       userRow.user_id = userID;
     }
 
-    userRow.password_salt = pwutils.generateSalt();
-    userRow.password_hash = pwutils.hashPassword(password, userRow.password_salt);
+    userRow.password_salt = pwmgr.generateSalt();
+    userRow.password_hash = pwmgr.hashPassword(password, userRow.password_salt);
     let results = await db('users').insert(userRow);
 
     // On success, results should contain the ID (the primary key), whether we specified one or used autoincrement

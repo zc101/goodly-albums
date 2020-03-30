@@ -1,11 +1,11 @@
-// Password hashing, checking, and updating utilities
+// Password hashing, checking, and updating functionality
 
 'use strict';
 const assert = require('assert').strict;
 const conf = require('./config');
 const crypto = require('crypto');
 const db = require('./db');
-const userutils = require('./userutils');
+const usermgr = require('./users');
 
 // Check if a password string matches the configured format
 function isValidPassword(password) {
@@ -84,7 +84,7 @@ async function checkPassword(user, password) {
   else {
     assert(typeof(user) === 'string', 'checkPassword: user must be a number or string');
 
-    let id = await userutils.getUserID(user);
+    let id = await usermgr.getUserID(user);
     if (id === null)
       console.warn('checkPassword: Failed to get userID for user "' + user + '"');
     else
@@ -130,7 +130,7 @@ async function updatePassword(user, password) {
   else {
     assert(typeof(user) === 'string', 'updatePassword: user must be a number or string');
 
-    let id = await userutils.getUserID(user);
+    let id = await usermgr.getUserID(user);
 
     if (id === null)
       console.warn('updatePassword: ID could not be found for username "' + user + '"');
