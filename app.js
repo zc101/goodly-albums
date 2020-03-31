@@ -1,3 +1,10 @@
+
+'use strict';
+
+// Create a global way to 'require' relative to the base directory
+global._baseDir = __dirname;
+global.baseRequire = name => require(`${__dirname}/${name}`);
+
 const express = require('express');
 var cookieParser = require('cookie-parser');
 
@@ -12,7 +19,7 @@ app.set('trust proxy', 'loopback');
 app.use(cookieParser());
 
 // Load routes
-app.get('/visitors', require('./route/visitors'));
+app.get('/visitors', baseRequire('route/visitors'));
 
 // Not-found handler
 // Express doesn't consider not-found an error condition (see issues/2718), so use non-err signature

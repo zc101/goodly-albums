@@ -1,6 +1,6 @@
 // Visitor counter
 
-const db = require('../manage/db');
+const db = baseRequire('manage/db');
 
 async function bumpVisitors(ip) {
   if (ip) {
