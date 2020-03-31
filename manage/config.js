@@ -4,8 +4,15 @@
 const assert = require('assert').strict;
 
 var config = {
+  database_params: {
+    socketPath      : '/var/run/mysqld/mysqld.sock'
+  , user            : 'goodlyalbums-app'
+  , password        : 'goodlyalbums-app'
+  , database        : 'GOODLYALBUMS'
+  }
+
 // Default password hashing options
-  password_salt_bytes: 16
+, password_salt_bytes: 16
 , password_hash_iterations: 100000
 , password_hash_bytes: 32
 , password_hash_method: 'sha256'

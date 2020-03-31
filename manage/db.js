@@ -1,15 +1,11 @@
 // Database connection abstraction
 
-let knex = require('knex');
+const conf = require('./config');
+const knex = require('knex');
 
 let poolOptions  = {
   client: 'mysql'
-, connection: {
-    socketPath      : '/var/run/mysqld/mysqld.sock'
-  , user            : 'goodlyalbums-app'
-  , password        : 'goodlyalbums-app'
-  , database        : 'GOODLYALBUMS'
-  }
+, connection: conf.get('database_params')
 , useNullAsDefault: true
 , pool: { min: 0, max: 50 }
 };
