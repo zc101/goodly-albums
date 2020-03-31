@@ -23,7 +23,7 @@ async function getUserID(username) {
   if (isValidUsername(username)) {
     let results = await db.select('user_id').from('users').where('user_name', username);
     if (results && results.length) {
-      if (results.length > 1) console.warn('getUserID: Found ' + String(results.length) + ' rows for username "' + username + '"');
+      if (results.length > 1) logger.warn('getUserID: Found ' + String(results.length) + ' rows for username "' + username + '"');
       return results[0].user_id;
     }
   }
@@ -38,7 +38,7 @@ async function addUser(username, password, userID) {
   if (isValidUsername(username) && pwmgr.isValidPassword(password)) {
     let existingID = await getUserID(username);
     if (existingID !== null) {
-      console.error('addUser: username "' + username + '" already exists under ID ' + String(existingID));
+      logger.error('addUser: username "' + username + '" already exists under ID ' + String(existingID));
       return null;
     }
 
@@ -47,7 +47,7 @@ async function addUser(username, password, userID) {
     if (typeof(userID) === 'number' && userID > 0) {
       let idCheck = await db.select('user_name').from('users').where('user_id', userID);
       if (idCheck.length) {
-        console.error('addUser: Given userID ' + String(userID) + ', but it\'s already in use under username "' + idCheck[0].user_name + '"');
+        logger.error('addUser: Given userID ' + String(userID) + ', but it\'s already in use under username "' + idCheck[0].user_name + '"');
         return null;
       }
       userRow.user_id = userID;
@@ -61,10 +61,10 @@ async function addUser(username, password, userID) {
     if (results && results.length)
       return results[0];
     else
-      console.error('addUser: INSERT returned nothing on username "' + username + '", userID <' + String(userID) + '>');
+      logger.error('addUser: INSERT returned nothing on username "' + username + '", userID <' + String(userID) + '>');
   }
   else
-    console.error('addUser: Received invalid username or password');
+    logger.error('addUser: Received invalid username or password');
 
   return null;
 };
@@ -77,11 +77,11 @@ async function deleteUserByID(userID) {
   let affectedRows = await db('users').where('user_id', userID).del();
 
   if (affectedRows) {
-    if (affectedRows > 1) console.warn('deleteUserByID: Deleted ' + String(affectedRows) + ' user rows for userID ' + String(userID));
+    if (affectedRows > 1) logger.warn('deleteUserByID: Deleted ' + String(affectedRows) + ' user rows for userID ' + String(userID));
     return true;
   }
   else
-    console.error('deleteUserByID: No rows updated (userID ' + String(userID) + ' probably doesn\'t exist)');
+    logger.error('deleteUserByID: No rows updated (userID ' + String(userID) + ' probably doesn\'t exist)');
 
   return false;
 };
@@ -94,7 +94,7 @@ async function deleteUser(user) {
   else {
     let id = await getUserID(user);
     if (id === null)
-      console.warn('deleteUser: ID could not be found for username "' + String(user) + '"');
+      logger.warn('deleteUser: ID could not be found for username "' + String(user) + '"');
     else
       return deleteUserByID(id);
   }

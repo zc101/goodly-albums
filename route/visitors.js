@@ -39,15 +39,15 @@ async function bumpVisitors(ip) {
         }
       }
       catch(err) {
-        console.error("getVisitors: Caught while running queries:");
-        console.error(err);
+        logger.error("getVisitors: Caught while running queries:");
+        logger.error(err);
       }
     }
     else // IP regex match failed
-      console.error("getVisitors: Received bad IP '" + ip + "'");
+      logger.error("getVisitors: Received bad IP '" + ip + "'");
   }
   else // !ip
-    console.error("getVisitors: No IP given");
+    logger.error("getVisitors: No IP given");
 
   return null;
 }

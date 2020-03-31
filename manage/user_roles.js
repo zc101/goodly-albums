@@ -16,7 +16,7 @@ async function getUserRoleIDs(user) {
   else {
     userID = await usermgr.getUserID(user);
     if (userID === null)
-      console.warn('getUserRoles: userID could not be found for username "' + String(user) + '"');
+      logger.warn('getUserRoles: userID could not be found for username "' + String(user) + '"');
   }
 
   if (userID && userID > 0) {
@@ -50,7 +50,7 @@ async function addUserRoleByID(userID, roleID) {
     results = await db('user_roles').insert(newRow);
   }
   catch (err) {
-    console.error('addUserRoleByID: INSERT failed (probably either the userID or roleID didn\'t exist)');
+    logger.error('addUserRoleByID: INSERT failed (probably either the userID or roleID didn\'t exist)');
     return false;
   }
 
@@ -58,7 +58,7 @@ async function addUserRoleByID(userID, roleID) {
   if (results && results.length)
     return true;
   else
-    console.error('addUserRoleByID: INSERT returned nothing');
+    logger.error('addUserRoleByID: INSERT returned nothing');
 
   return false;
 };
@@ -73,7 +73,7 @@ async function addUserRole(user, role) {
   else {
     userID = await usermgr.getUserID(user);
     if (userID === null) {
-      console.warn('addUserRole: ID could not be found for username "' + String(user) + '"');
+      logger.warn('addUserRole: ID could not be found for username "' + String(user) + '"');
       return false;
     }
   }
@@ -83,7 +83,7 @@ async function addUserRole(user, role) {
   else {
     roleID = await rolemgr.getRoleID(role);
     if (roleID === null) {
-      console.warn('addUserRole: ID could not be found for role name "' + String(role) + '"');
+      logger.warn('addUserRole: ID could not be found for role name "' + String(role) + '"');
       return false;
     }
   }
@@ -102,7 +102,7 @@ async function deleteUserRoleByID(userID, roleID) {
   if (affectedRows)
     return true;
   else
-    console.warn('deleteUserRoleByID: No rows deleted (row probably didn\'t exist)');
+    logger.warn('deleteUserRoleByID: No rows deleted (row probably didn\'t exist)');
 
   return false;
 };
@@ -117,7 +117,7 @@ async function deleteUserRole(user, role) {
   else {
     userID = await usermgr.getUserID(user);
     if (userID === null) {
-      console.warn('deleteUserRole: ID could not be found for username "' + String(user) + '"');
+      logger.warn('deleteUserRole: ID could not be found for username "' + String(user) + '"');
       return false;
     }
   }
@@ -127,7 +127,7 @@ async function deleteUserRole(user, role) {
   else {
     roleID = await rolemgr.getRoleID(role);
     if (roleID === null) {
-      console.warn('deleteUserRole: ID could not be found for role name "' + String(role) + '"');
+      logger.warn('deleteUserRole: ID could not be found for role name "' + String(role) + '"');
       return false;
     }
   }

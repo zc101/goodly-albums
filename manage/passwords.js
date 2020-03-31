@@ -26,8 +26,8 @@ function generateSalt() {
     return crypto.randomBytes(saltBytes).toString('hex');
   }
   catch (err) {
-    console.error('Caught crypto error while generating salt');
-    console.error(err);
+    logger.error('Caught crypto error while generating salt');
+    logger.error(err);
     return null;
   }
 };
@@ -44,8 +44,8 @@ function hashPassword(password, salt) {
       return crypto.pbkdf2Sync(password, salt, iters, hashBytes, hashMethod).toString('hex');
     }
     catch (err) {
-      console.error('Caught crypto error while hashing password');
-      console.error(err);
+      logger.error('Caught crypto error while hashing password');
+      logger.error(err);
       return null;
     }
   }
@@ -62,7 +62,7 @@ async function checkPasswordByID(userID, password) {
   let results = await db.select('password_hash', 'password_salt').from('users').where('user_id', userID);
 
   if (results && results.length) {
-    if (results.length > 1) console.warn('checkPasswordByID: Found ' + String(results.length) + ' rows for userID ' + String(userID));
+    if (results.length > 1) logger.warn('checkPasswordByID: Found ' + String(results.length) + ' rows for userID ' + String(userID));
     let stored_hash = results[0].password_hash;
     let salt = results[0].password_salt;
     let hash = hashPassword(password, salt);
@@ -70,7 +70,7 @@ async function checkPasswordByID(userID, password) {
       return true;
   }
   else
-    console.warn('checkPasswordByID: No rows found for userID ' + String(userID));
+    logger.warn('checkPasswordByID: No rows found for userID ' + String(userID));
 
   return false;
 };
@@ -86,7 +86,7 @@ async function checkPassword(user, password) {
 
     let id = await usermgr.getUserID(user);
     if (id === null)
-      console.warn('checkPassword: Failed to get userID for user "' + user + '"');
+      logger.warn('checkPassword: Failed to get userID for user "' + user + '"');
     else
       return checkPasswordByID(id, password);
   }
@@ -112,11 +112,11 @@ async function updatePasswordByID(userID, password) {
     .update({password_salt: salt, password_hash: hash});
 
   if (affectedRows) {
-    if (affectedRows > 1) console.warn('updatePasswordByID: Updated ' + String(affectedRows) + ' rows for userID ' + String(userID));
+    if (affectedRows > 1) logger.warn('updatePasswordByID: Updated ' + String(affectedRows) + ' rows for userID ' + String(userID));
     return true;
   }
   else
-    console.warn('updatePasswordByID: No rows updated on userID ' + String(userID));
+    logger.warn('updatePasswordByID: No rows updated on userID ' + String(userID));
 
   return false;
 }
@@ -133,7 +133,7 @@ async function updatePassword(user, password) {
     let id = await usermgr.getUserID(user);
 
     if (id === null)
-      console.warn('updatePassword: ID could not be found for username "' + user + '"');
+      logger.warn('updatePassword: ID could not be found for username "' + user + '"');
     else
       return updatePasswordByID(id, password);
   }

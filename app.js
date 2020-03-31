@@ -5,6 +5,7 @@
 global._baseDir = __dirname;
 global.baseRequire = name => require(`${__dirname}/${name}`);
 
+const conf = baseRequire('manage/config');
 const express = require('express');
 var cookieParser = require('cookie-parser');
 
@@ -32,4 +33,4 @@ app.use(function (req, res, next) {
   res.status(400).send(); //(obj);
 });
 
-app.listen(port, () => console.log(`Express app listening on port ${port}!`));
+app.listen(port, () => logger.log(`Express app listening on port ${port}!`));

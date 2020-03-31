@@ -3,6 +3,9 @@
 'use strict';
 const assert = require('assert').strict;
 
+// Create a logger that we can replace or disable for tests
+global.logger = console;
+
 var config = {
   database_params: {
     socketPath      : '/var/run/mysqld/mysqld.sock'

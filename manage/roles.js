@@ -22,7 +22,7 @@ async function getRoleID(rolename) {
   if (isValidRoleName(rolename)) {
     let results = await db.select('role_id').from('roles').where('role_name', rolename);
     if (results && results.length) {
-      if (results.length > 1) console.warn('getRoleID: Found ' + String(results.length) + ' rows for role name "' + rolename + '"');
+      if (results.length > 1) logger.warn('getRoleID: Found ' + String(results.length) + ' rows for role name "' + rolename + '"');
       return results[0].role_id;
     }
   }
@@ -36,7 +36,7 @@ async function getRoleName(roleID) {
   if (typeof(roleID) === 'number') {
     let results = await db.select('role_name').from('roles').where('role_id', roleID);
     if (results && results.length) {
-      if (results.length > 1) console.warn('getRoleName: Found ' + String(results.length) + ' rows for roleID ' + String(roleID));
+      if (results.length > 1) logger.warn('getRoleName: Found ' + String(results.length) + ' rows for roleID ' + String(roleID));
       return results[0].role_name;
     }
   }
@@ -52,7 +52,7 @@ async function addRole(rolename, roleID) {
     // Make sure the role name doesn't already exist
     let existingID = await getRoleID(rolename);
     if (existingID !== null) {
-      console.error('addRole: role name "' + rolename + '" already exists under ID ' + String(existingID));
+      logger.error('addRole: role name "' + rolename + '" already exists under ID ' + String(existingID));
       return null;
     }
 
@@ -63,7 +63,7 @@ async function addRole(rolename, roleID) {
       // Make sure it isn't already in use
       let existingName = await getRoleName(roleID);
       if (existingName !== null) {
-        console.error('addRole: Given roleID ' + String(roleID) + ', but it\'s already in use under role name "' + existingName + '"');
+        logger.error('addRole: Given roleID ' + String(roleID) + ', but it\'s already in use under role name "' + existingName + '"');
         return null;
       }
 
@@ -77,10 +77,10 @@ async function addRole(rolename, roleID) {
     if (results && results.length)
       return results[0];
     else
-      console.error('addRole: INSERT returned nothing on role name "' + rolename + '", roleID <' + String(roleID) + '>');
+      logger.error('addRole: INSERT returned nothing on role name "' + rolename + '", roleID <' + String(roleID) + '>');
   }
   else
-    console.error('addRole: Received invalid role name');
+    logger.error('addRole: Received invalid role name');
 
   return null;
 };
@@ -97,11 +97,11 @@ async function deleteRoleByID(roleID) {
   let affectedRows = await db('roles').where('role_id', roleID).del();
 
   if (affectedRows) {
-    if (affectedRows > 1) console.warn('deleteRoleByID: Deleted ' + String(affectedRows) + ' role rows for roleID ' + String(roleID));
+    if (affectedRows > 1) logger.warn('deleteRoleByID: Deleted ' + String(affectedRows) + ' role rows for roleID ' + String(roleID));
     return true;
   }
   else
-    console.error('deleteRoleByID: No rows updated (roleID ' + String(roleID) + ' probably didn\'t exist)');
+    logger.error('deleteRoleByID: No rows updated (roleID ' + String(roleID) + ' probably didn\'t exist)');
 
   return false;
 };
@@ -114,7 +114,7 @@ async function deleteRole(role) {
   else {
     let id = await getRoleID(role);
     if (id === null)
-      console.warn('deleteRole: ID could not be found for role name "' + role + '"');
+      logger.warn('deleteRole: ID could not be found for role name "' + role + '"');
     else
       return deleteRoleByID(id);
   }
