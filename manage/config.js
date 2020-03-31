@@ -21,6 +21,9 @@ var config = {
   Number of characters must be between 5 and 20 (inclusive).
   Regex courtesy of SO: https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username */
 , username_regex: /^[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/
+
+// Role name default regex. Similar to username one, except allowing 4 characters minimum
+, rolename_regex: /^[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$/
 };
 
 
