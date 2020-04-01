@@ -28,7 +28,7 @@ async function getUserRoleIDs(user) {
     return ids;
   }
 
-  return null;
+  return [];
 };
 
 

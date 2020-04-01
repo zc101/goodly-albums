@@ -109,11 +109,15 @@ async function checkPassword(user, password) {
 };
 
 
-// Updates the password for a given user ID
+// Updates the password for a given user ID if different than the existing one
 // Returns a Boolean value
 async function updatePasswordByID(userID, password) {
   assert(typeof(userID) === 'number', 'updatePasswordByID: userID must be a number');
   assert(typeof(password) === 'string', 'updatePasswordByID: password must be a string');
+
+  // Verify that the password is different
+  if (await checkPasswordByID(userID, password) === true)
+    return false;
 
   let salt = generateSalt();
   let hash = hashPassword(password, salt);
