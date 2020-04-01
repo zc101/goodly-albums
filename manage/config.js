@@ -7,11 +7,16 @@ const assert = require('assert').strict;
 global.logger = console;
 
 var config = {
-  database_params: {
+  database_connection_params: {
     socketPath      : '/var/run/mysqld/mysqld.sock'
   , user            : 'goodlyalbums-app'
   , password        : 'goodlyalbums-app'
   , database        : 'GOODLYALBUMS'
+  }
+
+, database_pool_params: {
+    min: 2
+  , max: 50
   }
 
 // Default password hashing options

@@ -5,9 +5,9 @@ const knex = require('knex');
 
 let poolOptions  = {
   client: 'mysql'
-, connection: conf.get('database_params')
+, connection: conf.get('database_connection_params')
+, pool: conf.get('database_pool_params')
 , useNullAsDefault: true
-, pool: { min: 0, max: 50 }
 };
 
 let pool = knex(poolOptions);
