@@ -5,7 +5,21 @@ const assert = require('assert').strict;
 const conf = require('./config');
 const crypto = require('crypto');
 const db = require('./db');
-const usermgr = require('./users');
+
+// Include a local copy of users/getUserID() to avoid circular script dependencies.
+// Return a user ID given a username, or null if not found
+async function getUserID(username) {
+  if (typeof(username) === 'string' && username.match(conf.get('username_regex')) !== null) {
+    let results = await db.select('user_id').from('users').where('user_name', username);
+    if (results && results.length) {
+      if (results.length > 1) logger.warn('getUserID: Found ' + String(results.length) + ' rows for username "' + username + '"');
+      return results[0].user_id;
+    }
+  }
+
+  return null;
+};
+
 
 // Check if a password string matches the configured format
 function isValidPassword(password) {
@@ -84,7 +98,7 @@ async function checkPassword(user, password) {
   else {
     assert(typeof(user) === 'string', 'checkPassword: user must be a number or string');
 
-    let id = await usermgr.getUserID(user);
+    let id = await getUserID(user);
     if (id === null)
       logger.warn('checkPassword: Failed to get userID for user "' + user + '"');
     else
@@ -130,7 +144,7 @@ async function updatePassword(user, password) {
   else {
     assert(typeof(user) === 'string', 'updatePassword: user must be a number or string');
 
-    let id = await usermgr.getUserID(user);
+    let id = await getUserID(user);
 
     if (id === null)
       logger.warn('updatePassword: ID could not be found for username "' + user + '"');
