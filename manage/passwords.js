@@ -35,33 +35,20 @@ function isValidPassword(password) {
 
 // Generate a random salt and return it as a Base64 string
 function generateSalt() {
-  try {
-    let saltBytes = conf.get('password_salt_bytes');
-    return crypto.randomBytes(saltBytes).toString('base64');
-  }
-  catch (err) {
-    logger.error('Caught crypto error while generating salt');
-    logger.error(err);
-    return null;
-  }
+  let saltBytes = conf.get('password_salt_bytes');
+  return crypto.randomBytes(saltBytes).toString('base64');
 };
 
 
 // Hash a password synchronously using PBKDF2 and the given salt and return it as a Base64 string
 function hashPassword(password, salt) {
   assert(typeof(salt) === 'string', 'hashPassword: salt must be a string');
+
   if (isValidPassword(password)) {
-    try {
-      let iters = conf.get('password_hash_iterations');
-      let hashBytes = conf.get('password_hash_bytes');
-      let hashMethod = conf.get('password_hash_method');
-      return crypto.pbkdf2Sync(password, salt, iters, hashBytes, hashMethod).toString('base64');
-    }
-    catch (err) {
-      logger.error('Caught crypto error while hashing password');
-      logger.error(err);
-      return null;
-    }
+    let iters = conf.get('password_hash_iterations');
+    let hashBytes = conf.get('password_hash_bytes');
+    let hashMethod = conf.get('password_hash_method');
+    return crypto.pbkdf2Sync(password, salt, iters, hashBytes, hashMethod).toString('base64');
   }
   else return null;
 };
