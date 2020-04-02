@@ -20,9 +20,11 @@ var config = {
   }
 
 // Default password hashing options
-, password_salt_bytes: 16
-, password_hash_iterations: 100000
+, password_salt_bytes: 18
 , password_hash_bytes: 32
+, password_salt_len: 24 // Base64 uses 6 bits per 8-bit byte
+, password_hash_len: 44
+, password_hash_iterations: 100000
 , password_hash_method: 'sha256'
 
 // Default password requirements: 8-40 ASCII printable characters

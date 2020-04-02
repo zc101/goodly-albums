@@ -61,8 +61,8 @@ describe(':manage/passwords', function() {
 
 
   describe('#generateSalt()', function() {
-    let saltLen = conf.get('password_salt_bytes') * 2;
-    let saltRegex = /^[a-fA-F0-9]+$/;
+    let saltLen = conf.get('password_salt_len');
+    let saltRegex = /^[a-zA-Z0-9\+\/=]+$/;
     var salt;
 
     it('does not throw an error', function() {
@@ -84,9 +84,9 @@ describe(':manage/passwords', function() {
 
 
   describe('#hashPassword()', function() {
-    let hashLen = conf.get('password_hash_bytes') * 2;
-    let hashRegex = /^[a-fA-F0-9]+$/;
-    let salt = '76aee4a3780ad515e288c7575f4e2efe';
+    let hashLen = conf.get('password_hash_len');
+    let hashRegex = /^[a-zA-Z0-9\+\/=]+$/;
+    let salt = 'bK/EmMj8DCkGYk/cCFcNVA==';
     var hash;
     
     before('get a sample hash', function() {

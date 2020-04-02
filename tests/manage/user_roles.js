@@ -16,8 +16,8 @@ describe(':manage/user_roles', function() {
     let results = await db('users').insert({
       user_id: 41
     , user_name: 'userrole_test_user'
-    , password_hash: '7961b7a15182e3d079b7dc0b315db1d04b000eb9de64240616faada322509542' // 'p&ssword'
-    , password_salt: '76aee4a3780ad515e288c7575f4e2efe'
+    , password_hash: '1'
+    , password_salt: '1'
     });
     expect(results).to.have.lengthOf(1);
     expect(results[0]).to.equal(41);
