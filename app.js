@@ -7,7 +7,8 @@ global.baseRequire = name => require(`${__dirname}/${name}`);
 
 const conf = baseRequire('manage/config');
 const express = require('express');
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
+const csrfd = baseRequire('middleware/csrf-defense');
 
 const port = 3000;
 const app = express();
@@ -18,6 +19,11 @@ app.set('trust proxy', 'loopback');
 
 // Load middleware
 app.use(cookieParser());
+app.get('/*', csrfd.ensureCookie); // Visitor query in footer should make sure a backend get() is called regularly
+app.put('/*', csrfd.checkHeaderAndQuery);
+app.post('/*', csrfd.checkHeaderAndQuery);
+app.put('/*', csrfd.resetCookie);
+app.post('/*', csrfd.resetCookie);
 
 // Load routes
 app.get('/visitors', baseRequire('route/visitors'));
