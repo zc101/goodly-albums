@@ -6,9 +6,10 @@ global._baseDir = __dirname;
 global.baseRequire = name => require(`${__dirname}/${name}`);
 
 const conf = baseRequire('manage/config');
-const express = require('express');
 const cookieParser = require('cookie-parser');
 const csrfd = baseRequire('middleware/csrf-defense');
+const decryptCookieTokens = baseRequire('middleware/decrypt_cookie_tokens');
+const express = require('express');
 
 const port = 3000;
 const app = express();
@@ -17,12 +18,15 @@ const app = express();
 // So, this lets us get client IPs using X-Forwarded-* headers
 app.set('trust proxy', 'loopback');
 
-// Load middleware
+// Load middleware - use & GET
 app.use(cookieParser());
+app.use(decryptCookieTokens);
 app.get('/*', csrfd.ensureCookie); // Visitor query in footer should make sure a backend get() is called regularly
+// PUT
 app.put('/*', csrfd.checkHeaderAndQuery);
-app.post('/*', csrfd.checkHeaderAndQuery);
 app.put('/*', csrfd.resetCookie);
+// POST
+app.post('/*', csrfd.checkHeaderAndQuery);
 app.post('/*', csrfd.resetCookie);
 
 // Load routes

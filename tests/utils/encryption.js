@@ -13,7 +13,7 @@ describe(':utils/encryption', function() {
   , testNil: null
   };
 
-  // Encrypted payload should be 3 base64 fields separated by colons
+  // Encrypted token strings should contain 3 base64 fields separated by colons
   const encRegex = /^[a-zA-Z0-9\+\/=]+:[a-zA-Z0-9\+\/=]+:[a-zA-Z0-9\+\/=]+$/;
 
 
