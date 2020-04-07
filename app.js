@@ -7,7 +7,7 @@ global.baseRequire = name => require(`${__dirname}/${name}`);
 
 const conf = baseRequire('manage/config');
 const cookieParser = require('cookie-parser');
-const csrfd = baseRequire('middleware/csrf-defense');
+const csrfd = baseRequire('middleware/csrf_defense');
 const decryptCookieTokens = baseRequire('middleware/decrypt_cookie_tokens');
 const express = require('express');
 
