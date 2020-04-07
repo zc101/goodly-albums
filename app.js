@@ -8,7 +8,6 @@ global.baseRequire = name => require(`${__dirname}/${name}`);
 const conf = baseRequire('manage/config');
 const cookieParser = require('cookie-parser');
 const csrfd = baseRequire('middleware/csrf_defense');
-const decryptCookieTokens = baseRequire('middleware/decrypt_cookie_tokens');
 const express = require('express');
 
 const port = 3000;
@@ -19,16 +18,10 @@ const app = express();
 app.set('trust proxy', 'loopback');
 
 
-// Load middleware - Use
+// Load middleware
 app.use(cookieParser());
-app.use(decryptCookieTokens);
-// GET
-app.get('/refresh', csrfd.ensureCookie);
-app.get('/user_login', csrfd.checkHeaderAndQuery);
-// PUT
-app.put('/*', csrfd.checkHeaderAndQuery);
-// POST
-app.post('/*', csrfd.checkHeaderAndQuery);
+app.use(csrfd.checkHeader); // Should reset CSRF cookie on failure, so it's useful even for /refresh
+app.use(baseRequire('middleware/decrypt_cookie_tokens'));
 
 
 // Load routes
