@@ -18,19 +18,24 @@ const app = express();
 // So, this lets us get client IPs using X-Forwarded-* headers
 app.set('trust proxy', 'loopback');
 
+
 // Load middleware - Use
 app.use(cookieParser());
 app.use(decryptCookieTokens);
 // GET
-app.get('/*', csrfd.ensureCookie);
+app.get('/refresh', csrfd.ensureCookie);
+app.get('/user_login', csrfd.checkHeaderAndQuery);
 // PUT
 app.put('/*', csrfd.checkHeaderAndQuery);
 // POST
 app.post('/*', csrfd.checkHeaderAndQuery);
 
+
 // Load routes
 app.get('/refresh', (req, res) => res.status(200).send()); // Stub route to simply invoke middleware
+app.get('/user_login', baseRequire('route/user_login'));
 app.get('/visitors', baseRequire('route/visitors'));
+
 
 // Not-found handler
 // Express doesn't consider not-found an error condition (see issues/2718), so use non-err signature
