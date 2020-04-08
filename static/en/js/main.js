@@ -5,7 +5,7 @@
 // Parts functions
 /********************************/
 
-// Automates the flipping of hamburgers. Wish I'd had this earlier in college!
+// Automates the flipping of hamburgers. Popular functionality among college students.
 function toggleBurger() {
-    document.getElementsByClassName("navlist")[0].classList.toggle("responsive");
+    $('.navlist').toggleClass('responsive');
 }
