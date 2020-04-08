@@ -9,3 +9,20 @@ body {
   font-family: 'Lato', sans-serif;
   color: #2a2d34;
 }
+
+.hidden {
+  display: none;
+}
+
+.btn-themed {
+  background-color: #3a3d44;
+  color: #f2efe9;
+  border-color: #2a2d34;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-themed:hover,
+.btn-themed:focus {
+    background-color: #f2efe9;
+    color: #3a3d44;
+}
