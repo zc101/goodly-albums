@@ -13,20 +13,22 @@ const express = require('express');
 const port = 3000;
 const app = express();
 
+
 // We should always be using the NGINX reverse proxy
 // So, this lets us get client IPs using X-Forwarded-* headers
 app.set('trust proxy', 'loopback');
 
 
 // Load middleware
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(csrfd.checkHeader); // Should reset CSRF cookie on failure, so it's useful even for /refresh
+app.use(csrfd.checkHeaderOrQuery); // Should reset CSRF cookie on failure, so it's useful even for /refresh
 app.use(baseRequire('middleware/decrypt_cookie_tokens'));
 
 
 // Load routes
 app.get('/refresh', (req, res) => res.status(200).send()); // Stub route to simply invoke middleware
-app.get('/user_login', baseRequire('route/user_login'));
+app.post('/user_login', baseRequire('route/user_login'));
 app.get('/visitors', baseRequire('route/visitors'));
 
 

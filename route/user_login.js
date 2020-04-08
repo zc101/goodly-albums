@@ -34,10 +34,12 @@ function setAuthToken(req, res, uID, rIDs) {
 
 // Route handler
 module.exports = async function (req, res) {
-  let userID = await usermgr.getUserID(req.query.username); // Handles the username input validation too
+  let username = (req.body && req.body.username) || req.query.username;
+  let password = (req.body && req.body.password) || req.query.password;
+  let userID = await usermgr.getUserID(username); // Handles the username input validation too
 
-  if (userID !== null && typeof(req.query.password) === 'string') {
-    if (await pwmgr.checkPasswordByID(userID, req.query.password) === true) {
+  if (userID !== null && typeof(password) === 'string') {
+    if (await pwmgr.checkPasswordByID(userID, password) === true) {
       let roleIDs = await urmgr.getUserRoleIDs(userID);
       setAuthToken(req, res, userID, roleIDs);
       res.status(200).send();

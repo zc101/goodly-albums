@@ -32,11 +32,11 @@ function ensureCookie(req, res, next) {
 
 
 function checkHeader(req, res, next) {
-  let csrf_token = req.cookies.csrf_token;
+  let cookie_token = req.cookies.csrf_token;
   resetCookie(req, res); // Change out the CSRF cookie with every request
 
-  if (typeof(csrf_token) === 'string' && csrf_token.match(uuidRegex) !== null) {
-    if (req.header('X-CSRF-Token') === csrf_token) {
+  if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
+    if (req.header('X-CSRF-Token') === cookie_token) {
       next();
       return;
     }
@@ -47,11 +47,12 @@ function checkHeader(req, res, next) {
 
 
 function checkQuery(req, res, next) {
-  let csrf_token = req.cookies.csrf_token;
+  let cookie_token = req.cookies.csrf_token;
   resetCookie(req, res); // Change out the CSRF cookie with every request
 
-  if (typeof(csrf_token) === 'string' && csrf_token.match(uuidRegex) !== null) {
-    if (req.query.csrf_token === csrf_token) {
+  if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
+    let query_token = (req.body && req.body.csrf_token) || req.query.csrf_token;
+    if (query_token === cookie_token) {
       next();
       return;
     }
@@ -62,11 +63,28 @@ function checkQuery(req, res, next) {
 
 
 function checkHeaderAndQuery(req, res, next) {
-  let csrf_token = req.cookies.csrf_token;
+  let cookie_token = req.cookies.csrf_token;
   resetCookie(req, res); // Change out the CSRF cookie with every request
 
-  if (typeof(csrf_token) === 'string' && csrf_token.match(uuidRegex) !== null) {
-    if (req.header('X-CSRF-Token') === csrf_token && req.query.csrf_token === csrf_token) {
+  if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
+    let query_token = (req.body && req.body.csrf_token) || req.query.csrf_token;
+    if (req.header('X-CSRF-Token') === cookie_token && query_token === cookie_token) {
+      next();
+      return;
+    }
+  }
+
+  res.status(403).send(rejection);
+};
+
+
+function checkHeaderOrQuery(req, res, next) {
+  let cookie_token = req.cookies.csrf_token;
+  resetCookie(req, res); // Change out the CSRF cookie with every request
+
+  if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
+    let query_token = (req.body && req.body.csrf_token) || req.query.csrf_token;
+    if (req.header('X-CSRF-Token') === cookie_token || query_token === cookie_token) {
       next();
       return;
     }
@@ -82,4 +100,5 @@ module.exports = {
 , checkHeader
 , checkQuery
 , checkHeaderAndQuery
+, checkHeaderOrQuery
 };
