@@ -22,7 +22,7 @@ app.set('trust proxy', 'loopback');
 // Load middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(csrfd.checkHeaderOrQuery); // Should reset CSRF cookie on failure, so it's useful even for /refresh
+app.use(csrfd.checkCookie); // Should reset CSRF cookie on failure, so it's useful even for /refresh
 app.use(baseRequire('middleware/decrypt_cookie_tokens'));
 
 

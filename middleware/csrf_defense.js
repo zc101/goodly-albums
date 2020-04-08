@@ -6,12 +6,13 @@ const uuidRegex = /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[
 const rejection = {error: 'Invalid CSRF response'};
 
 
-function resetCookie(req, res, next) {
+function resetToken(req, res, next) {
   res.cookie('csrf_token', uuid(),
   {
     domain: req.hostname
   , expires: 0
   , path: '/'
+  , sameSite: 'Lax'
   });
 
   if (typeof(next) === 'function')
@@ -19,12 +20,12 @@ function resetCookie(req, res, next) {
 };
 
 
-function ensureCookie(req, res, next) {
+function ensureToken(req, res, next) {
   let csrf_token = req.cookies.csrf_token;
 
   // TODO: See whether it's better/faster to check against the regex or to simply regenerate the UUID token every time
   if (typeof(csrf_token) !== 'string' || csrf_token.match(uuidRegex) === null) {
-    resetCookie(req, res);
+    resetToken(req, res);
   }
 
   next();
@@ -33,7 +34,7 @@ function ensureCookie(req, res, next) {
 
 function checkHeader(req, res, next) {
   let cookie_token = req.cookies.csrf_token;
-  resetCookie(req, res); // Change out the CSRF cookie with every request
+  resetToken(req, res); // Change out the CSRF cookie with every request
 
   if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
     if (req.header('X-CSRF-Token') === cookie_token) {
@@ -48,7 +49,7 @@ function checkHeader(req, res, next) {
 
 function checkQuery(req, res, next) {
   let cookie_token = req.cookies.csrf_token;
-  resetCookie(req, res); // Change out the CSRF cookie with every request
+  resetToken(req, res); // Change out the CSRF cookie with every request
 
   if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
     let query_token = (req.body && req.body.csrf_token) || req.query.csrf_token;
@@ -62,9 +63,25 @@ function checkQuery(req, res, next) {
 };
 
 
+function checkCookie(req, res, next) {
+  let cookie_token = req.cookies.csrf_token;
+  let echo_token = req.cookies.csrf_token_echo;
+  resetToken(req, res); // Change out the CSRF cookie with every request
+
+  if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
+    if (echo_token === cookie_token) {
+      next();
+      return;
+    }
+  }
+
+  res.status(403).send(rejection);
+};
+
+
 function checkHeaderAndQuery(req, res, next) {
   let cookie_token = req.cookies.csrf_token;
-  resetCookie(req, res); // Change out the CSRF cookie with every request
+  resetToken(req, res); // Change out the CSRF cookie with every request
 
   if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
     let query_token = (req.body && req.body.csrf_token) || req.query.csrf_token;
@@ -80,7 +97,7 @@ function checkHeaderAndQuery(req, res, next) {
 
 function checkHeaderOrQuery(req, res, next) {
   let cookie_token = req.cookies.csrf_token;
-  resetCookie(req, res); // Change out the CSRF cookie with every request
+  resetToken(req, res); // Change out the CSRF cookie with every request
 
   if (typeof(cookie_token) === 'string' && cookie_token.match(uuidRegex) !== null) {
     let query_token = (req.body && req.body.csrf_token) || req.query.csrf_token;
@@ -95,10 +112,11 @@ function checkHeaderOrQuery(req, res, next) {
 
 
 module.exports = {
-  resetCookie
-, ensureCookie
+  resetToken
+, ensureToken
 , checkHeader
 , checkQuery
+, checkCookie
 , checkHeaderAndQuery
 , checkHeaderOrQuery
 };
