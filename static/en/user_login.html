@@ -20,6 +20,7 @@
     form {
       max-width: calc(300px + 1rem);
       margin: 1rem auto 1rem auto;
+      text-align: center;
     }
 
     @media only screen and (min-width: 350px) {
@@ -40,8 +41,11 @@
   <div class="content">
     <main>
       <form action="srv/user_login" method="post" onsubmit="antiCSRF(function(){})" class="border border-dark rounded shadow p-2">
+        <h4>Please log in</h4>
+        <div id="login_failed" class="hidden mb-2 alert alert-danger" role="alert">Invalid username or password</div>
         <input type="text" id="username_field" class="border rounded mb-2" name="username" placeholder="Username">
         <input type="password" id="password_field" class="border rounded mb-2" name="password" placeholder="Password">
+        <input type="hidden" name="return_to">
         <input type="submit" class="btn btn-themed shadow-sm" value="Submit">
       </form>
     </main>
@@ -54,6 +58,16 @@
   <script>window.bootstrap || document.write('<script src="js/vendor/bootstrap-4.4.1.min.js"><\/script>')</script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+  <script>window.URLSearchParams || document.write('<script src="https://unpkg.com/@ungap/url-search-params"><\/script>')</script>
+  <script>
+    var params = new URLSearchParams(window.location.search);
+    var returnTo = params.get('return_to');
+    var failed = params.get('failed');
+    if (returnTo)
+      $('input[name="return_to"]').val(returnTo);
+    if (failed)
+      $('#login_failed').removeClass('hidden');
+  </script>
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <!-- script>

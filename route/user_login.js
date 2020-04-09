@@ -37,15 +37,18 @@ module.exports = async function (req, res) {
   let username = (req.body && req.body.username) || req.query.username;
   let password = (req.body && req.body.password) || req.query.password;
   let userID = await usermgr.getUserID(username); // Handles the username input validation too
+  let returnTo = (req.body && req.body.return_to) || req.query.return_to || '/en/index.html';
 
   if (userID !== null && typeof(password) === 'string') {
     if (await pwmgr.checkPasswordByID(userID, password) === true) {
       let roleIDs = await urmgr.getUserRoleIDs(userID);
       setAuthToken(req, res, userID, roleIDs);
-      res.status(200).send();
+      res.redirect(303, returnTo);
       return;
     }
   }
 
-  res.status(403).send();
+  // If we didn't succeed and return above, redirect back to the login page
+  let failpage = '/en/user_login.html?failed=true&return_to=' + returnTo;
+  res.redirect(303, failpage);
 };
