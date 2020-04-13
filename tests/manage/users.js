@@ -76,7 +76,7 @@ describe(':manage/users', function() {
   });
 
 
-  describe.skip('#getUsername() [not currently implemented]', function() {
+  describe('#getUsername()', function() {
     it('returns null given a non-number argument', async function() {
       expect(await usermgr.getUsername('users_test21')).to.equal(null);
     });

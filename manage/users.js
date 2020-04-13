@@ -32,6 +32,20 @@ async function getUserID(username) {
 };
 
 
+// Return a username given a userID, or null if not found
+async function getUsername(userID) {
+  if (typeof(userID) === 'number') {
+    let results = await db.select('user_name').from('users').where('user_id', userID);
+    if (results && results.length) {
+      if (results.length > 1) logger.warn('getUsername: Found ' + String(results.length) + ' rows for userID ' + String(userID));
+      return results[0].user_name;
+    }
+  }
+
+  return null;
+};
+
+
 // Adds a new user and returns the user ID, or null on failure
 // Can optionally pass in a specific userID to use
 async function addUser(username, password, userID) {
@@ -106,6 +120,7 @@ async function deleteUser(user) {
 module.exports = {
   isValidUsername
 , getUserID
+, getUsername
 , addUser
 , deleteUserByID
 , deleteUser
