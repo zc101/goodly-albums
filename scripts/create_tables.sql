@@ -13,8 +13,8 @@ CREATE TABLE visitors (
 CREATE TABLE users (
   user_id       INT         NOT NULL  AUTO_INCREMENT
 , user_name     VARCHAR(20) NOT NULL
-, password_hash VARCHAR(44) NOT NULL
-, password_salt VARCHAR(24) NOT NULL
+, password_hash CHAR(44)    NOT NULL
+, password_salt CHAR(24)    NOT NULL
 , PRIMARY KEY (user_id)
 );
 ALTER TABLE users AUTO_INCREMENT = 1000;
