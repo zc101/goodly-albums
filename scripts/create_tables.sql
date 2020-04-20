@@ -48,3 +48,13 @@ CREATE TABLE albums (
 , FOREIGN KEY (owner_id) REFERENCES users(user_id)
 );
 CREATE UNIQUE INDEX albums_index ON albums(album_id, owner_id);
+
+
+-- Link table matching media (photos, etc) to albums
+CREATE TABLE media (
+  album_id      INT          NOT NULL
+, media_file    CHAR(36)     NOT NULL  -- 16-byte hash + 4-char file extension
+, media_caption VARCHAR(255)
+, FOREIGN KEY (album_id) REFERENCES albums(album_id)
+);
+CREATE UNIQUE INDEX media_index ON media(album_id, media_file);
