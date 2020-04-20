@@ -43,7 +43,7 @@ module.exports = async function (req, res) {
     if (await pwmgr.checkPasswordByID(userID, password) === true) {
       let roleIDs = await urmgr.getUserRoleIDs(userID);
       setAuthToken(req, res, userID, roleIDs);
-      res.redirect(303, returnTo);
+      res.redirect(303, decodeURIComponent(returnTo));
       return;
     }
   }

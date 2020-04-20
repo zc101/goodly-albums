@@ -26,11 +26,17 @@ app.use(csrfd.checkCookie); // Should reset CSRF cookie on failure, so it's usef
 app.use(baseRequire('middleware/decrypt_cookie_tokens'));
 
 
-// Load routes
+// Load main routes
 app.get('/refresh', (req, res) => res.status(200).send()); // Stub route to simply invoke middleware
 app.post('/user_login', baseRequire('route/user_login'));
-app.get('/my_albums', baseRequire('route/my_albums'));
 app.get('/visitors', baseRequire('route/visitors'));
+
+
+// Load "secure" (auth required) routes
+let routeSecure = express.Router({mergeParams: true, strict: true});
+app.use('/secure', routeSecure);
+routeSecure.use(baseRequire('route/secure'));
+routeSecure.get('/my_albums', baseRequire('route/secure/my_albums'));
 
 
 // Not-found handler
