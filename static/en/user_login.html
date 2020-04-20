@@ -43,8 +43,8 @@
       <form action="srv/user_login" method="post" onsubmit="antiCSRF(function(){})" class="border border-dark rounded shadow p-2">
         <h4>Please log in</h4>
         <div id="login_failed" class="hidden mb-2 alert alert-danger" role="alert">Invalid username or password</div>
-        <input type="text" id="username_field" class="border rounded mb-2" name="username" placeholder="Username">
-        <input type="password" id="password_field" class="border rounded mb-2" name="password" placeholder="Password">
+        <input type="text" autocomplete="username" id="username_field" class="border rounded mb-2" name="username" placeholder="Username">
+        <input type="password" autocomplete="current-password" id="password_field" class="border rounded mb-2" name="password" placeholder="Password">
         <input type="hidden" name="return_to">
         <input type="submit" class="btn btn-themed shadow-sm" value="Submit">
       </form>
