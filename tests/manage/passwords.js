@@ -109,7 +109,7 @@ describe(':manage/passwords', function() {
       expect(hash.match(hashRegex)).to.not.equal(null);
     });
 
-    it('is repeatable given the same password & hash', function() {
+    it('is repeatable given the same password & salt', function() {
       expect(pwmgr.hashPassword(validPW, salt)).to.equal(hash);
     });
   });
