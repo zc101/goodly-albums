@@ -1,0 +1,146 @@
+// Album utilities
+
+'use strict';
+const assert = require('assert').strict;
+const conf = require('./config');
+const db = require('./db');
+const usermgr = require('./users');
+
+
+// Check if an album name matches the configured format
+function isValidAlbumName(albumName) {
+  // This is part of the validation, so return instead of asserting
+  if (typeof(albumName) !== 'string') return false;
+
+  if (albumName.match(conf.get('albumName_regex')) === null)
+    return false;
+  else
+    return true;
+};
+
+
+// Return an album ID given an album name, or null if not found
+async function getAlbumID(albumName) {
+  if (isValidAlbumName(albumName)) {
+    let results = await db.select('album_id').from('albums').where('album_name', albumName);
+    if (results && results.length) {
+      if (results.length > 1) logger.warn('getAlbumID: Found ' + String(results.length) + ' rows for album name "' + albumName + '"');
+      return results[0].album_id;
+    }
+  }
+
+  return null;
+};
+
+
+// Return an album name given an album ID, or null if not found
+async function getAlbumName(albumID) {
+  if (typeof(albumID) === 'number') {
+    let results = await db.select('album_name').from('albums').where('album_id', albumID);
+    if (results && results.length) {
+      if (results.length > 1) logger.warn('getAlbumName: Found ' + String(results.length) + ' rows for albumID ' + String(albumID));
+      return results[0].album_name;
+    }
+  }
+
+  return null;
+};
+
+
+// Adds a new album linked to the given userID and returns an albumID, or null on failure
+// Can optionally pass in a specific albumID to use
+async function createAlbum(userID, albumName, albumID) {
+  if (isValidAlbumName(albumName)) {
+    // Make sure the album name doesn't already exist
+    let existingID = await getAlbumID(albumName);
+    if (existingID !== null) {
+      logger.error('createAlbum: album name "' + albumName + '" already exists under ID ' + String(existingID));
+      return null;
+    }
+
+    // Make sure the userID is valid
+    let username = await usermgr.getUsername(userID);
+    if (username === null) {
+      logger.error('createAlbum: given invalid userID ' + String(userID));
+      return null;
+    }
+
+    let albumRow = {
+      album_name: albumName
+    , owner_id: userID
+    };
+
+    // If we were passed a specific album ID...
+    if (typeof(albumID) === 'number' && albumID > 0) {
+      // Make sure it isn't already in use
+      let existingName = await getAlbumName(albumID);
+      if (existingName !== null) {
+        logger.error('createAlbum: Given albumID ' + String(albumID) + ', but it\'s already in use under album name "' + existingName + '"');
+        return null;
+      }
+      // Use it
+      albumRow.album_id = albumID;
+    }
+
+    let results = await db('albums').insert(albumRow);
+
+    // On success, results should contain the ID (the primary key), whether we specified one or used autoincrement
+    if (results && results.length)
+      return results[0];
+    else
+      logger.error('createAlbum: INSERT returned nothing on album name "' + albumName + '", albumID <' + String(albumID) + '>');
+  }
+  else
+    logger.error('createAlbum: Received invalid album name');
+
+  return null;
+};
+
+
+// Deletes a given album by albumID and returns a Boolean success value
+async function deleteAlbumByID(albumID) {
+  assert(typeof(albumID) === 'number', 'deleteAlbumByID: albumID must be a number');
+
+  // First delete any media linkages
+  await db('media').where('album_id', albumID).del();
+
+  // TODO: Delete any media files not linked by other albums
+
+  // Then delete the actual album
+  let affectedRows = await db('albums').where('album_id', albumID).del();
+
+  if (affectedRows) {
+    if (affectedRows > 1) logger.warn('deleteAlbumByID: Deleted ' + String(affectedRows) + ' album rows for albumID ' + String(albumID));
+    return true;
+  }
+  else
+    logger.error('deleteAlbumByID: No rows updated (albumID ' + String(albumID) + ' probably didn\'t exist)');
+
+  return false;
+};
+
+
+// Deletes a given album by name or ID and returns a Boolean success value
+async function deleteAlbum(album) {
+  if (typeof(album) === 'number')
+    return deleteAlbumByID(album);
+  else {
+    let id = await getAlbumID(album);
+    if (id === null)
+      logger.warn('deleteAlbum: ID could not be found for album name "' + album + '"');
+    else
+      return deleteAlbumByID(id);
+  }
+
+  return false;
+};
+
+
+module.exports = {
+  isValidAlbumName
+, getAlbumID
+, getAlbumName
+, createAlbum
+, deleteAlbumByID
+, deleteAlbum
+};

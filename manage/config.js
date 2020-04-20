@@ -41,6 +41,11 @@ var config = {
 
 // Role name default regex. Similar to username one, except allowing 4 characters minimum
 , rolename_regex: /^[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$/
+
+// Album name default regex. Similar to username one, except allowing:
+//   quotes / apostrophes / spaces / dashes / colons / parentheses
+//   30 characters maximum
+, albumname_regex: /^[a-zA-Z0-9]([_\'\`\-\:\(\) ]|[a-zA-Z0-9]){3,28}[a-zA-Z0-9]$/
 };
 
 
