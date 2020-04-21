@@ -47,6 +47,19 @@ async function getAlbumName(albumID) {
 };
 
 
+// Return a list of album objects given a userID (empty list if none found)
+async function getAlbumsByUserID(userID) {
+  if (typeof(userID) === 'number') {
+    let results = await db.select('album_id', 'album_name', 'album_caption', 'album_thumbnail').from('albums').where('owner_id', userID);
+    if (results && results.length) {
+      return results;
+    }
+  }
+
+  return [];
+};
+
+
 // Adds a new album linked to the given userID and returns an albumID, or null on failure
 // Can optionally pass in a specific albumID to use
 async function createAlbum(userID, albumName, albumID) {
@@ -140,6 +153,7 @@ module.exports = {
   isValidAlbumName
 , getAlbumID
 , getAlbumName
+, getAlbumsByUserID
 , createAlbum
 , deleteAlbumByID
 , deleteAlbum
