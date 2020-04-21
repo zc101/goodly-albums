@@ -46,6 +46,9 @@ var config = {
 //   quotes / apostrophes / spaces / dashes / colons / parentheses
 //   30 characters maximum
 , albumname_regex: /^[a-zA-Z0-9]([_\'\`\-\:\(\) ]|[a-zA-Z0-9]){3,28}[a-zA-Z0-9]$/
+
+// Maximum length of album/photo captions
+, caption_maxlen: 255
 };
 
 

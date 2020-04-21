@@ -61,8 +61,8 @@ async function getAlbumsByUserID(userID) {
 
 
 // Adds a new album linked to the given userID and returns an albumID, or null on failure
-// Can optionally pass in a specific albumID to use
-async function createAlbum(userID, albumName, albumID) {
+// Can optionally pass in a caption and a specific albumID to use
+async function createAlbum(userID, albumName, caption, albumID) {
   if (isValidAlbumName(albumName)) {
     // Make sure the album name doesn't already exist
     let existingID = await getAlbumID(albumName);
@@ -82,6 +82,10 @@ async function createAlbum(userID, albumName, albumID) {
       album_name: albumName
     , owner_id: userID
     };
+
+    // If we were passed a caption string, truncate it to the max length and use it
+    if (typeof(caption) === 'string')
+      albumRow.album_caption = caption.slice(0, conf.get('caption_maxlen'));
 
     // If we were passed a specific album ID...
     if (typeof(albumID) === 'number' && albumID > 0) {
