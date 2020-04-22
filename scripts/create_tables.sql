@@ -42,7 +42,7 @@ CREATE TABLE albums (
   album_id        INT          NOT NULL  AUTO_INCREMENT
 , owner_id        INT          NOT NULL
 , album_name      VARCHAR(30)  NOT NULL
-, album_caption   VARCHAR(255)
+, album_desc      VARCHAR(255)
 , album_thumbnail CHAR(36)
 , PRIMARY KEY (album_id)
 , FOREIGN KEY (owner_id) REFERENCES users(user_id)

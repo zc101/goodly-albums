@@ -50,7 +50,7 @@ async function getAlbumName(albumID) {
 // Return a list of album objects given a userID (empty list if none found)
 async function getAlbumsByUserID(userID) {
   if (typeof(userID) === 'number') {
-    let results = await db.select('album_id', 'album_name', 'album_caption', 'album_thumbnail').from('albums').where('owner_id', userID);
+    let results = await db.select('album_id', 'album_name', 'album_desc', 'album_thumbnail').from('albums').where('owner_id', userID);
     if (results && results.length) {
       return results;
     }
@@ -61,8 +61,8 @@ async function getAlbumsByUserID(userID) {
 
 
 // Adds a new album linked to the given userID and returns an albumID, or null on failure
-// Can optionally pass in a caption and a specific albumID to use
-async function createAlbum(userID, albumName, caption, albumID) {
+// Can optionally pass in a description and a specific albumID to use
+async function createAlbum(userID, albumName, desc, albumID) {
   if (isValidAlbumName(albumName)) {
     // Make sure the album name doesn't already exist
     let existingID = await getAlbumID(albumName);
@@ -83,9 +83,9 @@ async function createAlbum(userID, albumName, caption, albumID) {
     , owner_id: userID
     };
 
-    // If we were passed a caption string, truncate it to the max length and use it
-    if (typeof(caption) === 'string')
-      albumRow.album_caption = caption.slice(0, conf.get('caption_maxlen'));
+    // If we were passed a description string, truncate it to the max length and use it
+    if (typeof(desc) === 'string')
+      albumRow.album_desc = desc.slice(0, conf.get('album_desc_maxlen'));
 
     // If we were passed a specific album ID...
     if (typeof(albumID) === 'number' && albumID > 0) {
