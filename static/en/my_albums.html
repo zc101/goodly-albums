@@ -25,7 +25,10 @@
   <header><script>$("header").load("/en/parts/header.html");</script></header>
   <nav><script>$("nav").load("/en/parts/nav.html");</script></nav>
   <div class="content">
-    <main>Loading...<script>antiCSRF(function() {$("main").load("/en/srv/secure/my_albums")})</script></main>
+    <div id="fail_alert" class="hidden mb-2 alert alert-danger" role="alert"></div>
+    <main>
+      <div id="album-list" class="card-deck">Loading...</div>
+    </main>
     <footer><script>$("footer").load("/en/parts/footer.html");</script></footer>
   </div>
 
@@ -35,6 +38,7 @@
   <script>window.bootstrap || document.write('<script src="/en/js/vendor/bootstrap-4.4.1.min.js"><\/script>')</script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/pages/my_albums.js"></script>
 
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <!-- script>

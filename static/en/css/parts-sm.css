@@ -1,4 +1,4 @@
-/* Header, Nav, Footer small-size CSS */
+/* Mobile-first small-size CSS for page content parts */
 
 header {
   position: fixed;
@@ -79,6 +79,32 @@ main {
   background-color: white;
   color: #2a2d34;
   z-index: 0;
+}
+
+/* Used for lists of both albums and album media */
+.content .card-deck {
+  padding: 0 5px 5px 5px;
+  margin-right: 0;
+  background-color: #f2efe9;
+}
+
+.content .card {
+  min-width: 256px;
+  max-width: 256px;
+  margin-top: 15px;
+  margin-right: 0;
+  background-color: white;
+  border: 2px solid #2a2d34;
+}
+
+.empty-thumbnail {
+  display: flex;
+  height: 144px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background-color: #3a3d44;
+  color: #f2efe9;
 }
 
 footer {

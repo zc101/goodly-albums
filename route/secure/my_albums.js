@@ -1,5 +1,10 @@
-// Currently just a stub to test login flow
+// Route to get the user's albums and return them
 
-module.exports = function (req, res) {
-  res.status(200).send('<h3>Your Albums Here</h3>');
+'use strict';
+const albummgr = baseRequire('manage/albums');
+
+module.exports = async function (req, res) {
+  let auth = res.locals.cookieTokens.auth_token;
+  let albums = await albummgr.getAlbumsByUserID(auth.userID);
+  res.status(200).send(albums);
 };
