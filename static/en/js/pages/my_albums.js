@@ -17,11 +17,12 @@ antiCSRF(function() {
         contents = contents + card + '</div></div>';
       }
       $("#album-list").html(contents);
+      $("#alert_msg").addClass("hidden");
     })
     .fail(function(jqxhr, textStatus, error) {
       if (jqxhr.status === 403)
         window.location.href = "/en/user_login.html?return_to=" + encodeURIComponent(window.location.href);
       else
-        $("#fail_alert").removeClass("hidden").html("Error: " + error);
+        $("#alert_msg").removeClass("alert-primary").addClass("alert-danger").html("Error: " + error);
     });
 });
