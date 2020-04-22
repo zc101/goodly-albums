@@ -3,7 +3,7 @@
 'use strict';
 
 module.exports = function (req, res, next) {
-  let auth = (res.locals.cookieTokens && res.locals.cookieTokens.auth_token && (typeof(auth.userID) === 'number'));
+  let auth = (res.locals.cookieTokens && res.locals.cookieTokens.auth_token && (typeof(res.locals.cookieTokens.auth_token.userID) === 'number'));
 
   if (auth)
     next();
