@@ -1,4 +1,4 @@
-/* Main CSS */
+/* Main CSS for body and generic classes */
 
 @import 'h5bp.css';
 @import url('https://fonts.googleapis.com/css?family=Great+Vibes|Lato&display=swap');
@@ -23,6 +23,6 @@ body {
 
 .btn-themed:hover,
 .btn-themed:focus {
-    background-color: #f2efe9;
-    color: #3a3d44;
+  background-color: #f2efe9;
+  color: #3a3d44;
 }
