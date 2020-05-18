@@ -89,6 +89,7 @@ main {
 }
 
 .content .card {
+  position: relative;
   min-width: 256px;
   max-width: 256px;
   margin-top: 15px;
@@ -105,6 +106,22 @@ main {
   align-items: center;
   background-color: #3a3d44;
   color: #f2efe9;
+}
+
+.album-delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  border: none;
+  border-left: 2px solid #2a2d34;
+  border-bottom: 2px solid #2a2d34;
+  background-color: #cc1c24;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 footer {
