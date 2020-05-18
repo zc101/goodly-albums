@@ -29,5 +29,23 @@ function antiCSRF(cb) {
   }
 };
 
-// Pre-load a token asynchronously
+// Pre-load a token
 antiCSRF();
+
+// Convenience function to wrap a JSON loader in antiCSRF
+function requestJSON(url, cbSuccess, cbFail) {
+  if (typeof(url) === 'string' && typeof(cbSuccess) === 'function') {
+    antiCSRF(function() {
+      if (typeof(cbFail === 'function'))
+        $.getJSON(url).done(cbSuccess).fail(cbFail);
+      else
+        $.getJSON(url).done(cbSuccess)
+        .fail(function(jqxhr, textStatus, error) {
+          if (jqxhr.status === 403)
+            window.location.href = "/en/user_login.html?return_to=" + encodeURIComponent(window.location.href);
+          else
+            $("#alert_msg").removeClass("alert-primary").addClass("alert-danger").html("Error: " + error);
+        });
+    });
+  }
+}
