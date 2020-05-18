@@ -36,9 +36,9 @@ antiCSRF();
 function requestJSON(url, cbSuccess, cbFail) {
   if (typeof(url) === 'string' && typeof(cbSuccess) === 'function') {
     antiCSRF(function() {
-      if (typeof(cbFail === 'function'))
+      if (typeof(cbFail) === 'function')
         $.getJSON(url).done(cbSuccess).fail(cbFail);
-      else
+      else {
         $.getJSON(url).done(cbSuccess)
         .fail(function(jqxhr, textStatus, error) {
           if (jqxhr.status === 403)
@@ -46,6 +46,27 @@ function requestJSON(url, cbSuccess, cbFail) {
           else
             $("#alert_msg").removeClass("alert-primary").addClass("alert-danger").html("Error: " + error);
         });
+      }
+    });
+  }
+}
+
+
+// Convenience function to wrap a jQuery POST in antiCSRF
+function requestPost(url, data, cbSuccess, cbFail) {
+  if (typeof(url) === 'string') {
+    antiCSRF(function() {
+      if (typeof(cbFail) === 'function')
+        $.post(url, data).done(cbSuccess).fail(cbFail);
+      else {
+        $.post(url, data).done(cbSuccess)
+        .fail(function(jqxhr, textStatus, error) {
+          if (jqxhr.status === 403)
+            window.location.href = "/en/user_login.html?return_to=" + encodeURIComponent(window.location.href);
+          else
+            $("#alert_msg").removeClass("alert-primary").addClass("alert-danger").html("Error: " + error);
+        });
+      }
     });
   }
 }
