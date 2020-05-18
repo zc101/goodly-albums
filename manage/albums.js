@@ -47,6 +47,19 @@ async function getAlbumName(albumID) {
 };
 
 
+// Return the data associated with the given album ID
+async function getAlbumDetailsByID(albumID) {
+  if (typeof(albumID) === 'number') {
+    let results = await db.select().from('albums').where('album_id', albumID);
+    if (results && results.length) {
+      return results[0];
+    }
+  }
+
+  return null;
+};
+
+
 // Return a list of album objects given a userID (empty list if none found)
 async function getAlbumsByUserID(userID) {
   if (typeof(userID) === 'number') {
@@ -157,6 +170,7 @@ module.exports = {
   isValidAlbumName
 , getAlbumID
 , getAlbumName
+, getAlbumDetailsByID
 , getAlbumsByUserID
 , createAlbum
 , deleteAlbumByID
