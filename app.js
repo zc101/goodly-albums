@@ -37,6 +37,7 @@ let routeSecure = express.Router({mergeParams: true, strict: true});
 app.use('/secure', routeSecure);
 routeSecure.use(baseRequire('route/secure'));
 routeSecure.get('/my_albums', baseRequire('route/secure/my_albums'));
+routeSecure.post('/new_album', baseRequire('route/secure/new_album'));
 
 
 // Not-found handler
