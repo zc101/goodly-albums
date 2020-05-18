@@ -39,6 +39,10 @@ function createAlbum() {
     album_name: document.getElementById("new_album_name").value
   , album_desc: document.getElementById("new_album_desc").value
   };
+
+  if (document.getElementById("new_album_private").checked)
+    data.album_private = true;
+
   requestPost("/en/srv/secure/new_album", data, function () {
     loadAlbums(function () {
       $("#alert_msg").setAlertClass("alert-success").html("'" + data.album_name + "' created successfully");

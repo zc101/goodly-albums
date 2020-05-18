@@ -75,7 +75,7 @@ async function getAlbumsByUserID(userID) {
 
 // Adds a new album linked to the given userID and returns an albumID, or null on failure
 // Can optionally pass in a description and a specific albumID to use
-async function createAlbum(userID, albumName, desc, albumID) {
+async function createAlbum(userID, albumName, desc, isPrivate, albumID) {
   if (isValidAlbumName(albumName)) {
     // Make sure the album name doesn't already exist
     let existingID = await getAlbumID(albumName);
@@ -94,6 +94,7 @@ async function createAlbum(userID, albumName, desc, albumID) {
     let albumRow = {
       album_name: albumName
     , owner_id: userID
+    , album_private: isPrivate ? 1 : 0
     };
 
     // If we were passed a description string, truncate it to the max length and use it

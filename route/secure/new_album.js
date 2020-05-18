@@ -8,6 +8,7 @@ const validator = require('validator');
 module.exports = async function (req, res) {
   let albumName = (req.body && req.body.album_name) || req.query.album_name;
   let albumDesc = (req.body && req.body.album_desc) || req.query.album_desc;
+  let albumPrivate = ((req.body && req.body.album_private) || req.query.album_private) ? true : false;
   let userID = res.locals.cookieTokens.auth_token.userID;
 
 /* Currently createAlbum() just truncates the desc if too long
@@ -29,7 +30,7 @@ module.exports = async function (req, res) {
   if (albummgr.isValidAlbumName(albumName)) {
     let existingID = await albummgr.getAlbumID(albumName);
     if (existingID === null) {
-      let newID = await albummgr.createAlbum(userID, albumName, albumDesc);
+      let newID = await albummgr.createAlbum(userID, albumName, albumDesc, albumPrivate);
       if (newID === null)
         res.status(400).send("An unknown error occurred");
       else

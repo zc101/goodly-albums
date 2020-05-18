@@ -44,6 +44,7 @@ CREATE TABLE albums (
 , album_name      VARCHAR(30)  NOT NULL
 , album_desc      VARCHAR(255)
 , album_thumbnail CHAR(36)
+, album_private   BOOLEAN      NOT NULL
 , PRIMARY KEY (album_id)
 , FOREIGN KEY (owner_id) REFERENCES users(user_id)
 );
