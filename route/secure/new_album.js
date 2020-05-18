@@ -2,6 +2,7 @@
 
 'use strict';
 const albummgr = baseRequire('manage/albums');
+const validator = require('validator');
 
 // Route handler
 module.exports = async function (req, res) {
@@ -19,6 +20,10 @@ module.exports = async function (req, res) {
     }
   }
 */
+
+  // Sanitize the description string
+  if (typeof(albumDesc) === 'string')
+    albumDesc = validator.escape(albumDesc);
 
   // Make sure the album name is valid and doesn't already exist
   if (albummgr.isValidAlbumName(albumName)) {
