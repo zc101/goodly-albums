@@ -44,7 +44,7 @@ function requestJSON(url, cbSuccess, cbFail) {
           if (jqxhr.status === 403)
             window.location.href = "/en/user_login.html?return_to=" + encodeURIComponent(window.location.href);
           else
-            $("#alert_msg").removeClass("hidden").removeClass("alert-primary").addClass("alert-danger").html("Error: " + jqxhr.responseText);
+            $("#alert_msg").setAlertClass("alert-danger").html("Error: " + jqxhr.responseText);
         });
       }
     });
@@ -64,7 +64,7 @@ function requestPost(url, data, cbSuccess, cbFail) {
           if (jqxhr.status === 403)
             window.location.href = "/en/user_login.html?return_to=" + encodeURIComponent(window.location.href);
           else
-            $("#alert_msg").removeClass("hidden").removeClass("alert-primary").addClass("alert-danger").html("Error: " + jqxhr.responseText);
+            $("#alert_msg").setAlertClass("alert-danger").html("Error: " + jqxhr.responseText);
         });
       }
     });

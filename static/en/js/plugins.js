@@ -21,4 +21,17 @@
   }
 }());
 
-// Place any jQuery/helper plugins in here.
+
+// Set the target to have only the specific classes given
+// Courtesy of https://stackoverflow.com/questions/5205052/set-class-with-jquery
+$.fn.setClass = function(classes) {
+  this.attr('class', classes);
+  return this;
+};
+
+
+// Sets the target to have only some classes universal to alerts, in addition to the given ones
+$.fn.setAlertClass = function(classes) {
+  this.setClass("mb-0 alert " + classes);
+  return this;
+};

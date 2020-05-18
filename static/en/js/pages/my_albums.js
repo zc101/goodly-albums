@@ -25,7 +25,7 @@ function loadAlbums(cb) {
       newContents = newContents + card + '</div></div>';
     }
     $("#album-list").html(baseContents + newContents);
-    $("#alert_msg").addClass("hidden");
+    $("#alert_msg").setAlertClass("hidden");
 
     if (typeof(cb) === "function")
       cb();
@@ -41,7 +41,7 @@ function createAlbum() {
   };
   requestPost("/en/srv/secure/new_album", data, function () {
     loadAlbums(function () {
-      $("#alert_msg").removeClass("hidden").removeClass("alert-primary").addClass("alert-success").html("'" + data.album_name + "' created successfully");
+      $("#alert_msg").setAlertClass("alert-success").html("'" + data.album_name + "' created successfully");
     });
   });
 };
@@ -55,7 +55,7 @@ function deleteAlbum() {
   };
   requestPost("/en/srv/secure/delete_album", data, function () {
     loadAlbums(function () {
-      $("#alert_msg").removeClass("hidden").removeClass("alert-primary").addClass("alert-success").html("'" + data.album_name + "' deleted successfully");
+      $("#alert_msg").setAlertClass("alert-success").html("'" + data.album_name + "' deleted successfully");
     });
   });
 };
