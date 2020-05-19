@@ -14,23 +14,28 @@ function loadAlbums(cb) {
     var newContents = '';
     for (var i = 0; i < data.length; ++i) {
       var album = data[i];
+
+      // 'Delete' button
       var card = '<div class="card"><button class="btn album-delete-btn" data-toggle="modal" data-target="#confirm-delete-modal" data-album-name="' + album.album_name + '" data-album-id="' + String(album.album_id) + '">&times;</button>';
+
+      // Album cover
       if (album.album_cover)
         card = card + '<img src="' + album.album_cover + '" class="card-img-top" alt="Album thumbnail">';
       else
         card = card + '<div class="empty-cover">(No Preview Available)</div>';
 
-      card = card + '<div class="card-body"><h5 class="card-title">' + album.album_name + '</h5>';
+      // Editable album name and description
+      card = card + '<div class="card-body"><input type="text" class="form-control border rounded mb-2" id="album_' + album.album_id + '_name" minlength="5" maxlength="30" pattern="[a-zA-Z0-9]([_|\'|`|-|:|\(|\)| ]|[a-zA-Z0-9]){3,28}[a-zA-Z0-9]" placeholder="Album name" value="' + album.album_name + '">';
+      card = card + '<textarea class="form-control border rounded mb-2" id="album_' + album.album_id + '_desc" rows="2">' + (album.album_desc || '') + '</textarea>';
 
-      if (album.album_desc)
-        card = card + '<p class="card-text">' + album.album_desc + '</p>';
-
+      // 'Save' and Make Public / Private buttons
+      card = card + '</div><div class="card-footer d-flex justify-content-around"><button class="btn btn-sm shadow-sm btn-themed flex-fill w-100 mr-1" data-album-id="' + String(album.album_id) + '" onclick="saveAlbumDetails(this)">Save</button>';
       if (album.album_private)
-        card = card + '</div><div class="card-footer"><button class="btn btn-sm shadow-sm btn-success w-100" data-album-id="' + String(album.album_id) + '" onclick="toggleAlbumPrivacy(this)">Make Public</button></div>';
+        card = card + '<button class="btn btn-sm shadow-sm btn-success flex-fill w-100 ml-1" data-album-id="' + String(album.album_id) + '" onclick="toggleAlbumPrivacy(this)">Make Public</button>';
       else
-        card = card + '</div><div class="card-footer"><button class="btn btn-sm shadow-sm btn-danger w-100" data-album-id="' + String(album.album_id) + '" onclick="toggleAlbumPrivacy(this)">Make Private</button></div>';
+        card = card + '<button class="btn btn-sm shadow-sm btn-danger flex-fill w-100 ml-1" data-album-id="' + String(album.album_id) + '" onclick="toggleAlbumPrivacy(this)">Make Private</button>';
 
-      newContents = newContents + card + '</div>';
+      newContents = newContents + card + '</div></div>';
     }
     $("#album-list").html(baseContents + newContents);
     $("#alert_msg").setAlertClass("hidden");
@@ -93,6 +98,23 @@ function toggleAlbumPrivacy(context) {
 
   requestPost("/en/srv/secure/toggle_album_private", data, function () {
     loadAlbums();
+  });
+};
+
+
+// Save album name and optional description
+function saveAlbumDetails(context) {
+  var albumID = $(context).data('album-id');
+  var data = {
+    album_id: albumID
+  , album_name: document.getElementById("album_" + albumID + "_name").value
+  , album_desc: document.getElementById("album_" + albumID + "_desc").value
+  };
+
+  requestPost("/en/srv/secure/update_album", data, function () {
+    loadAlbums(function () {
+      $("#alert_msg").setAlertClass("alert-success").html("'" + data.album_name + "' saved successfully");
+    });
   });
 };
 
