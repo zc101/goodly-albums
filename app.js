@@ -30,6 +30,7 @@ app.use(baseRequire('middleware/decrypt_cookie_tokens'));
 app.get('/refresh', (req, res) => res.status(200).send()); // Stub route to simply invoke middleware
 app.post('/user_login', baseRequire('route/user_login'));
 app.get('/visitors', baseRequire('route/visitors'));
+app.get('/public_albums', baseRequire('route/public_albums'));
 
 
 // Load "secure" (auth required) routes

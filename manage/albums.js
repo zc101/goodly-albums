@@ -73,6 +73,17 @@ async function getAlbumsByUserID(userID) {
 };
 
 
+// Return a list of public album objects (empty list if none found)
+async function getPublicAlbums() {
+  let results = await db.select('album_id', 'album_name', 'album_desc', 'album_cover').from('albums').where('album_private', 0);
+  if (results && results.length) {
+    return results;
+  }
+
+  return [];
+};
+
+
 // Adds a new album linked to the given userID and returns an albumID, or null on failure
 // Can optionally pass in a description and a specific albumID to use
 async function createAlbum(userID, albumName, desc, isPrivate, albumID) {
@@ -202,6 +213,7 @@ module.exports = {
 , getAlbumName
 , getAlbumDetailsByID
 , getAlbumsByUserID
+, getPublicAlbums
 , createAlbum
 , updateAlbumByID
 , deleteAlbumByID
