@@ -8,7 +8,7 @@ header {
   text-align: left;
   background-color: #2a2d34;
   color: #f2efe9;
-  z-index: 1;
+  z-index: 1000;
 }
 
 #site-title {
@@ -36,7 +36,7 @@ nav {
   width: 100%;
   background-color: #3a3d44;
   color: #f2efe9;
-  z-index: 1;
+  z-index: 1000;
 }
 
 .navlist {
@@ -112,7 +112,7 @@ main {
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 10;
   border: none;
   border-left: 2px solid #2a2d34;
   border-bottom: 2px solid #2a2d34;
@@ -130,4 +130,5 @@ footer {
   font-size: 10px;
   background-color: #2a2d34;
   color: #f2efe9;
+  z-index: 1000;
 }
