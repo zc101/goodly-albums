@@ -17,7 +17,7 @@ module.exports = async function (req, res) {
 
       // Flip the current value
       let newPrivacy = !album.album_private;
-      let success = await albummgr.setAlbumPrivacy(albumID, newPrivacy);
+      let success = await albummgr.updateAlbumByID(albumID, {album_private: newPrivacy});
 
       if (success) {
         res.status(200).send();

@@ -128,20 +128,30 @@ async function createAlbum(userID, albumName, desc, isPrivate, albumID) {
 };
 
 
-// Sets the album's "private" flag and returns a Boolean success value
-async function setAlbumPrivacy(albumID, makePrivate) {
-  assert(typeof(albumID) === 'number', 'setAlbumPrivacy: albumID must be a number');
+// Updates album details and returns a Boolean success value
+async function updateAlbumByID(albumID, fields) {
+  if (typeof(albumID) === 'number' && typeof(fields) === 'object') {
 
-  // Database uses a tinyInt internally
-  let privacyFlag = makePrivate ? 1 : 0;
-  let affectedRows = await db('albums').where('album_id', albumID).update({ album_private: privacyFlag });
+    // Copy acceptable fields to a new object
+    var newDetails = {};
+    if (isValidAlbumName(fields.album_name))
+      newDetails.album_name = fields.album_name;
+    if (typeof(fields.album_desc) === 'string' && fields.album_desc.length < conf.get("album_desc_maxlen"))
+      newDetails.album_desc = fields.album_desc;
+    if (typeof(fields.album_cover) === 'string' && fields.album_cover.length === 36)
+      newDetails.album_cover = fields.album_cover;
+    if (typeof(fields.album_private) !== 'undefined')
+      newDetails.album_private = fields.album_private ? 1 : 0;
 
-  if (affectedRows) {
-    if (affectedRows > 1) logger.warn('setAlbumPrivacy: Updated ' + String(affectedRows) + ' album rows for albumID ' + String(albumID));
-    return true;
+    let affectedRows = await db('albums').where('album_id', albumID).update(newDetails);
+
+    if (affectedRows) {
+      if (affectedRows > 1) logger.warn('updateAlbumByID: Updated ' + String(affectedRows) + ' album rows for albumID ' + String(albumID));
+      return true;
+    }
+    else
+      logger.error('updateAlbumByID: No rows updated for albumID ' + String(albumID));
   }
-  else
-    logger.error('setAlbumPrivacy: No rows updated (albumID ' + String(albumID) + ' probably didn\'t exist)');
 
   return false;
 };
@@ -193,7 +203,7 @@ module.exports = {
 , getAlbumDetailsByID
 , getAlbumsByUserID
 , createAlbum
-, setAlbumPrivacy
+, updateAlbumByID
 , deleteAlbumByID
 , deleteAlbum
 };
