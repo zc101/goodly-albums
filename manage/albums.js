@@ -63,7 +63,7 @@ async function getAlbumDetailsByID(albumID) {
 // Return a list of album objects given a userID (empty list if none found)
 async function getAlbumsByUserID(userID) {
   if (typeof(userID) === 'number') {
-    let results = await db.select('album_id', 'album_name', 'album_desc', 'album_thumbnail').from('albums').where('owner_id', userID);
+    let results = await db.select('album_id', 'album_name', 'album_desc', 'album_thumbnail', 'album_private').from('albums').where('owner_id', userID);
     if (results && results.length) {
       return results;
     }
@@ -128,6 +128,25 @@ async function createAlbum(userID, albumName, desc, isPrivate, albumID) {
 };
 
 
+// Sets the album's "private" flag and returns a Boolean success value
+async function setAlbumPrivacy(albumID, makePrivate) {
+  assert(typeof(albumID) === 'number', 'setAlbumPrivacy: albumID must be a number');
+
+  // Database uses a tinyInt internally
+  let privacyFlag = makePrivate ? 1 : 0;
+  let affectedRows = await db('albums').where('album_id', albumID).update({ album_private: privacyFlag });
+
+  if (affectedRows) {
+    if (affectedRows > 1) logger.warn('setAlbumPrivacy: Updated ' + String(affectedRows) + ' album rows for albumID ' + String(albumID));
+    return true;
+  }
+  else
+    logger.error('setAlbumPrivacy: No rows updated (albumID ' + String(albumID) + ' probably didn\'t exist)');
+
+  return false;
+};
+
+
 // Deletes a given album by albumID and returns a Boolean success value
 async function deleteAlbumByID(albumID) {
   assert(typeof(albumID) === 'number', 'deleteAlbumByID: albumID must be a number');
@@ -174,6 +193,7 @@ module.exports = {
 , getAlbumDetailsByID
 , getAlbumsByUserID
 , createAlbum
+, setAlbumPrivacy
 , deleteAlbumByID
 , deleteAlbum
 };

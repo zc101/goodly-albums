@@ -19,10 +19,18 @@ function loadAlbums(cb) {
         card = card + '<img src="' + album.album_thumbnail + '" class="card-img-top" alt="Album thumbnail">';
       else
         card = card + '<div class="empty-thumbnail">(No Preview Available)</div>';
+
       card = card + '<div class="card-body"><h5 class="card-title">' + album.album_name + '</h5>';
+
       if (album.album_desc)
         card = card + '<p class="card-text">' + album.album_desc + '</p>';
-      newContents = newContents + card + '</div></div>';
+
+      if (album.album_private)
+        card = card + '</div><div class="card-footer"><button class="btn btn-sm shadow-sm btn-success w-100" data-album-id="' + String(album.album_id) + '" onclick="toggleAlbumPrivacy(this)">Make Public</button></div>';
+      else
+        card = card + '</div><div class="card-footer"><button class="btn btn-sm shadow-sm btn-danger w-100" data-album-id="' + String(album.album_id) + '" onclick="toggleAlbumPrivacy(this)">Make Private</button></div>';
+
+      newContents = newContents + card + '</div>';
     }
     $("#album-list").html(baseContents + newContents);
     $("#alert_msg").setAlertClass("hidden");
@@ -75,6 +83,18 @@ $("#confirm-delete-modal").on('show.bs.modal', function (event) {
   // Fill it in
   $("#confirm-delete-name").text(deletingAlbumName);
 });
+
+
+// Handle album privacy toggling
+function toggleAlbumPrivacy(context) {
+  var data = {
+    album_id: $(context).data('album-id')
+  };
+
+  requestPost("/en/srv/secure/toggle_album_private", data, function () {
+    loadAlbums();
+  });
+};
 
 // Perform an initial load
 loadAlbums();
