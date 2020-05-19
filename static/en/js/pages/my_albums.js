@@ -15,10 +15,10 @@ function loadAlbums(cb) {
     for (var i = 0; i < data.length; ++i) {
       var album = data[i];
       var card = '<div class="card"><button class="btn album-delete-btn" data-toggle="modal" data-target="#confirm-delete-modal" data-album-name="' + album.album_name + '" data-album-id="' + String(album.album_id) + '">&times;</button>';
-      if (album.album_thumbnail)
-        card = card + '<img src="' + album.album_thumbnail + '" class="card-img-top" alt="Album thumbnail">';
+      if (album.album_cover)
+        card = card + '<img src="' + album.album_cover + '" class="card-img-top" alt="Album thumbnail">';
       else
-        card = card + '<div class="empty-thumbnail">(No Preview Available)</div>';
+        card = card + '<div class="empty-cover">(No Preview Available)</div>';
 
       card = card + '<div class="card-body"><h5 class="card-title">' + album.album_name + '</h5>';
 

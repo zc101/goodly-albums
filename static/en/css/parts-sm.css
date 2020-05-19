@@ -98,7 +98,7 @@ main {
   border: 2px solid #2a2d34;
 }
 
-.empty-thumbnail {
+.empty-cover {
   display: flex;
   height: 144px;
   text-align: center;

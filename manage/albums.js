@@ -63,7 +63,7 @@ async function getAlbumDetailsByID(albumID) {
 // Return a list of album objects given a userID (empty list if none found)
 async function getAlbumsByUserID(userID) {
   if (typeof(userID) === 'number') {
-    let results = await db.select('album_id', 'album_name', 'album_desc', 'album_thumbnail', 'album_private').from('albums').where('owner_id', userID);
+    let results = await db.select('album_id', 'album_name', 'album_desc', 'album_cover', 'album_private').from('albums').where('owner_id', userID);
     if (results && results.length) {
       return results;
     }
