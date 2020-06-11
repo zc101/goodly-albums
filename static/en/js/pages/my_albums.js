@@ -58,7 +58,7 @@ function createAlbum() {
 
   requestPost("/en/srv/secure/new_album", data, function () {
     loadAlbums(function () {
-      $("#alert_msg").setAlertClass("alert-success").html("'" + data.album_name + "' created successfully");
+      alertMessage("'" + data.album_name + "' created successfully");
     });
   });
 };
@@ -72,7 +72,7 @@ function deleteAlbum() {
   };
   requestPost("/en/srv/secure/delete_album", data, function () {
     loadAlbums(function () {
-      $("#alert_msg").setAlertClass("alert-success").html("'" + data.album_name + "' deleted successfully");
+      alertMessage("'" + data.album_name + "' deleted successfully");
     });
   });
 };
@@ -113,7 +113,7 @@ function saveAlbumDetails(context) {
 
   requestPost("/en/srv/secure/update_album", data, function () {
     loadAlbums(function () {
-      $("#alert_msg").setAlertClass("alert-success").html("'" + data.album_name + "' saved successfully");
+      alertMessage("'" + data.album_name + "' saved successfully");
     });
   });
 };

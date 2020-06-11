@@ -9,7 +9,7 @@ function antiCSRF(cb) {
 
     // Only set the response cookie if given a callback,
     // to make sure it's used immediately. Otherwise,
-    // anyone could just embed a page first to defeat CSRF.
+    // anyone could just embed a page first to defeat CSRF protection.
     if (typeof(cb) === 'function') {
       Cookies.set('csrf_token_echo', token);
       cb();
@@ -44,7 +44,7 @@ function requestJSON(url, cbSuccess, cbFail) {
           if (jqxhr.status === 403)
             window.location.href = "/en/user_login.html?return_to=" + encodeURIComponent(window.location.href);
           else
-            $("#alert_msg").setAlertClass("alert-danger").html("Error: " + jqxhr.responseText);
+            alertErrorCode(jqxhr.responseText);
         });
       }
     });
@@ -64,7 +64,7 @@ function requestPost(url, data, cbSuccess, cbFail) {
           if (jqxhr.status === 403)
             window.location.href = "/en/user_login.html?return_to=" + encodeURIComponent(window.location.href);
           else
-            $("#alert_msg").setAlertClass("alert-danger").html("Error: " + jqxhr.responseText);
+            alertErrorCode(jqxhr.responseText);
         });
       }
     });

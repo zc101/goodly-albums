@@ -2,6 +2,7 @@
 
 'use strict';
 const albummgr = baseRequire('manage/albums');
+const errors = baseRequire('utils/error_codes');
 const validator = require('validator');
 
 // Route handler
@@ -32,13 +33,13 @@ module.exports = async function (req, res) {
     if (existingID === null) {
       let newID = await albummgr.createAlbum(userID, albumName, albumDesc, albumPrivate);
       if (newID === null)
-        res.status(400).send("An unknown error occurred");
+        res.status(400).send(errors.UNKNOWN_ERROR);
       else
         res.status(200).send();
     }
     else
-      res.status(400).send("An album already exists with that name");
+      res.status(400).send(errors.ALBUM_NAME_EXISTS);
   }
   else
-    res.status(400).send("Invalid album name");
+    res.status(400).send(errors.ALBUM_NAME_INVALID);
 };
