@@ -1,0 +1,83 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Album Viewer | Goodly Medias</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="/en/css/main.css">
+  <link rel="icon" href="favicon.ico">
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="/en/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="/en/js/anti_csrf.js"></script>
+</head>
+
+<body>
+  <!--[if IE]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+
+  <header><script>$("header").load("/en/parts/header.html");</script></header>
+  <nav><script>$("nav").load("/en/parts/nav.html");</script></nav>
+  <div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm media deletion</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Do you really want to delete '<span id="confirm-delete-name"></span>'?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteMedia()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div id="alert_msg" class="mb-0 alert alert-primary" role="alert">Loading...</div>
+    <main>
+      <div id="media-list" class="card-deck">
+        <div class="card">
+          <form id="media-upload" action="/en/srv/secure/upload_media" method="post" enctype="multipart/form-data">
+            <div class="card-body">
+              <h5 class="card-title">Upload Media</h5>
+              <input id="media-album-id" type="hidden" name="album_id" />
+              <label for="media-files">Select up to 10 photos to upload to this album (max 10MB each).</label>
+              <input id="media-files" type="file" name="media" multiple />
+            </div>
+            <div class="card-footer">
+              <input id="media-submit" type="submit" class="btn btn-sm btn-themed shadow-sm w-100" value="Submit" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <footer><script>$("footer").load("/en/parts/footer.html");</script></footer>
+  </div>
+
+  <script src="js/vendor/modernizr-3.8.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script>window.bootstrap || document.write('<script src="/en/js/vendor/bootstrap-4.4.1.min.js"><\/script>')</script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/pages/view_album.js"></script>
+
+  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+  <!-- script>
+    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set','transport','beacon'); ga('send', 'pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script -->
+</body>
+</html>

@@ -32,6 +32,7 @@ function antiCSRF(cb) {
 // Pre-load a token
 antiCSRF();
 
+
 // Convenience function to wrap a JSON loader in antiCSRF
 function requestJSON(url, cbSuccess, cbFail) {
   if (typeof(url) === 'string' && typeof(cbSuccess) === 'function') {
@@ -67,6 +68,44 @@ function requestPost(url, data, cbSuccess, cbFail) {
             alertErrorCode(jqxhr.responseText);
         });
       }
+    });
+  }
+}
+
+
+// Convenience function to add event listeners handling antiCSRF'd multipart-form submissions
+function listenForMultipartSubmit(formSelector, cbSuccess, cbFail) {
+  var form = $(formSelector)[0];
+  if (form) {
+    // Inspired by SO: https://stackoverflow.com/a/48043063
+    form.addEventListener("submit", function(e) {
+      var fd = new FormData(this);
+      var xhr = new XMLHttpRequest();
+
+      antiCSRF(function() {
+        xhr.open(form.method.toUpperCase(), form.action);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 0 || xhr.status === 200) {
+              if (typeof(cbSuccess) === 'function')
+                cbSuccess();
+            }
+            else {
+              if (typeof(cbFail) === 'function')
+                cbFail();
+              else {
+                if (xhr.status === 403)
+                  window.location.href = "/en/user_login.html?return_to=" + encodeURIComponent(window.location.href);
+                else
+                  alertErrorCode(xhr.responseText);
+              }
+            }
+          }
+        };
+        xhr.send(fd);
+      });
+
+      e.preventDefault();
     });
   }
 }
