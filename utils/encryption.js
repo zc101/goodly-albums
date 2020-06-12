@@ -1,6 +1,7 @@
 // Provide data/token encryption, decryption, and validation
 
 const crypto = require('crypto');
+const keys = baseRequire('private-keys');
 
 // id-aes128-GCM or ChaCha20-Poly1305 would be preferable for AEAD, but Node Crypto doesn't seem to actually authenticate messages...
 // So, for the time being, just encrypt and hash the old-fashioned way.
@@ -9,11 +10,11 @@ const hmacAlgo = 'sha256';
 const keyBytes = 16; // 128 bits
 const ivBytes = 16;
 
-// Generate encryption and signing keys.
-// May want to store these at some point; otherwise whenever
-// the app resets, all existing tokens will be invalidated.
-const cipherKey = crypto.createSecretKey(crypto.randomBytes(keyBytes));
-const hmacKey = crypto.randomBytes(keyBytes);
+
+// Load private encryption and signing keys
+const cipherKey = crypto.createSecretKey(Buffer.from(keys.cipherKeyBytes));
+const hmacKey = Buffer.from(keys.hmacKeyBytes);
+
 
 // Expects either a utf8 string or a buffer
 // Returns a base64 string with the iv, encrypted data, and hash integrated, or null on failure
