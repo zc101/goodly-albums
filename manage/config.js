@@ -49,6 +49,18 @@ var config = {
 
 // Maximum length of album/photo captions
 , album_desc_maxlen: 255
+
+// Maximum number of media (photos, etc.) that can be uploaded in a single POST
+, media_max_uploads: 10
+
+// Maximum size of each media file (in bytes)
+, media_max_size: 10485760 /* 10MB */
+
+// Media file hashing method
+, media_hash_method: 'sha1'
+
+// Acceptable media file types and resulting extensions
+, media_accepted_types: {'png': '.png', 'jpg': '.jpg', 'bmp': '.bmp'}
 };
 
 

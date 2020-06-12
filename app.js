@@ -42,6 +42,7 @@ routeSecure.post('/new_album', baseRequire('route/secure/new_album'));
 routeSecure.post('/update_album', baseRequire('route/secure/update_album'));
 routeSecure.post('/delete_album', baseRequire('route/secure/delete_album'));
 routeSecure.post('/toggle_album_private', baseRequire('route/secure/toggle_album_private'));
+routeSecure.post('/upload_media', baseRequire('route/secure/upload_media'));
 
 
 // Not-found handler
