@@ -1,30 +1,23 @@
 // Endpoint for uploading and assigning media to albums
 
 'use strict';
-const albummgr = baseRequire('manage/albums');
 const config = baseRequire('manage/config');
-const crypto = require('crypto');
 const errors = baseRequire('utils/error_codes');
-const filetype = require('file-type');
-const fs = require('fs');
 const mediamgr = baseRequire('manage/media');
 const multer  = require('multer');
-const path = require('path');
+const uuid = require('uuid').v4;
 const validator = require('validator');
 
 
-// Keep track of the range of incoming files
-let incomingLow = 0;
-let incomingHigh = 0;
-
-// Use current incomingHigh as the initial filename and increment
+// Initially use a UUID as the incoming filename
 function computeMediaFilename(req, file, cb) {
-  cb(null, String(incomingHigh++));
+  cb(null, uuid());
 }
+
 
 let multerOpts = {
   storage: multer.diskStorage({
-    destination: 'media-incoming'
+    destination: config.get('media_incoming_dir')
   , filename: computeMediaFilename
   })
 , limits: {
@@ -40,10 +33,6 @@ let upload = multer(multerOpts).array('media');
 
 // Route handler
 module.exports = async function (req, res) {
-  let albumID = parseInt((req.body && req.body.album_id) || req.query.album_id);
-  let userID = res.locals.cookieTokens.auth_token.userID;
-  let returnPage = '/en/view_album.html?status=';
-
   // Check the album owner first before calling Multer
   // Also remember that the route may be called multiple times (once per chunk)
   // Should we embed album list in a cookie token to reduce lookups?
@@ -62,7 +51,7 @@ module.exports = async function (req, res) {
 */
 
   upload(req, res, async function (err) {
-    // Check for errors
+    // Check for upload errors
     if (err instanceof multer.MulterError) {
       if (err.code === 'LIMIT_FILE_COUNT')
         res.status(431).send(errors.TOO_MANY_FILES);
@@ -85,28 +74,18 @@ module.exports = async function (req, res) {
     }
 
     // Handle the media now that Multer has finished saving it
-    // TODO: Move this into a separate async process which the client can check periodically, and return a status immediately
+    // TODO: Use a truly async process which the client can check periodically, and then just return a status immediately
     // Also check Multer's provided MIME type first, as that's available earlier than file magic and few clients will maliciously fake the MIME type
-    var acceptedTypes = config.get('media_accepted_types');
-    for (var file of req.files) {
-      var fileBuf = fs.readFileSync(file.path);
-      var ft = await filetype.fromBuffer(fileBuf);
-      if (ft.ext in acceptedTypes) {
-        const hash = crypto.createHash(config.get('media_hash_method'));
-        hash.update(fileBuf);
-        var newFn = hash.digest('hex') + acceptedTypes[ft.ext];
-        var newPath = path.join('static', 'media', newFn);
-        console.log(file.path + " -> " + newPath);
-        fs.renameSync(file.path, newPath);
-      }
-      else {
-        // TODO: Delete all uploaded files? Or only the ones we can't process?
-        // Even better, just find a way to check type *as Multer receives form chunks*
-        res.status(415).send(errors.FILE_TYPE_NOT_ACCEPTED);
-        return;
-      }
-    }
+    let albumID = parseInt((req.body && req.body.album_id) || req.query.album_id);
+    let userID = res.locals.cookieTokens.auth_token.userID;
+    let mediaList = [];
+    for (var file of req.files)
+      mediaList.push(file.path);
 
-    res.status(200).send();
+    let errorCode = await mediamgr.addMedia(mediaList, albumID, userID);
+    if (errorCode)
+      res.status(400).send(errorCode);
+    else
+      res.status(200).send();
   });
 }

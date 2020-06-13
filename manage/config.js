@@ -2,6 +2,7 @@
 
 'use strict';
 const assert = require('assert').strict;
+const path = require('path');
 
 // Create a logger that we can replace or disable for tests
 global.logger = console;
@@ -49,6 +50,12 @@ var config = {
 
 // Maximum length of album/photo captions
 , album_desc_maxlen: 255
+
+// Incoming media directory
+, media_incoming_dir: path.join('static', 'media-incoming')
+
+// Final processed media directory
+, media_processed_dir: path.join('static', 'media')
 
 // Maximum number of media (photos, etc.) that can be uploaded in a single POST
 , media_max_uploads: 10
