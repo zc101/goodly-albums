@@ -73,6 +73,18 @@ async function getAlbumsByUserID(userID) {
 };
 
 
+// Return a boolean value indicating whether the given user ID owns a given album ID
+async function isAlbumOwnedByUserID(albumID, userID) {
+  if (!!albumID && typeof(albumID) === 'number' && !!userID && typeof(userID) === 'number') {
+    let results = await db.select('album_id').from('albums').where({'album_id': albumID, 'owner_id': userID});
+    if (results && results.length)
+      return true;
+  }
+
+  return false;
+};
+
+
 // Return a list of public album objects (empty list if none found)
 async function getPublicAlbums() {
   let results = await db.select('album_id', 'album_name', 'album_desc', 'album_cover').from('albums').where('album_private', 0);
@@ -213,6 +225,7 @@ module.exports = {
 , getAlbumName
 , getAlbumDetailsByID
 , getAlbumsByUserID
+, isAlbumOwnedByUserID
 , getPublicAlbums
 , createAlbum
 , updateAlbumByID
