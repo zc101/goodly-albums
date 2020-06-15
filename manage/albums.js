@@ -75,10 +75,24 @@ async function getAlbumsByUserID(userID) {
 
 // Return a boolean value indicating whether the given user ID owns a given album ID
 async function isAlbumOwnedByUserID(albumID, userID) {
-  if (!!albumID && typeof(albumID) === 'number' && !!userID && typeof(userID) === 'number') {
+  if (typeof(albumID) === 'number' && albumID > -1 && typeof(userID) === 'number' && userID > -1) {
     let results = await db.select('album_id').from('albums').where({'album_id': albumID, 'owner_id': userID});
     if (results && results.length)
       return true;
+  }
+
+  return false;
+};
+
+
+// Return a boolean value indicating whether the given user ID owns a given album ID
+async function isAlbumAccessibleToUserID(albumID, userID) {
+  if (typeof(albumID) === 'number' && albumID > -1 && typeof(userID) === 'number' && userID > -1) {
+    let results = await db.select('owner_id', 'album_private').from('albums').where('album_id', albumID);
+    if (results && results.length) {
+      if (results[0].owner_id === userID || !(results[0].album_private))
+        return true;
+    }
   }
 
   return false;
@@ -226,6 +240,7 @@ module.exports = {
 , getAlbumDetailsByID
 , getAlbumsByUserID
 , isAlbumOwnedByUserID
+, isAlbumAccessibleToUserID
 , getPublicAlbums
 , createAlbum
 , updateAlbumByID
