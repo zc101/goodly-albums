@@ -38,11 +38,13 @@ let routeSecure = express.Router({mergeParams: true, strict: true});
 app.use('/secure', routeSecure);
 routeSecure.use(baseRequire('route/secure'));
 routeSecure.get('/my_albums', baseRequire('route/secure/my_albums'));
+routeSecure.get('/get_media', baseRequire('route/secure/get_media'));
 routeSecure.post('/new_album', baseRequire('route/secure/new_album'));
 routeSecure.post('/update_album', baseRequire('route/secure/update_album'));
 routeSecure.post('/delete_album', baseRequire('route/secure/delete_album'));
 routeSecure.post('/toggle_album_private', baseRequire('route/secure/toggle_album_private'));
 routeSecure.post('/upload_media', baseRequire('route/secure/upload_media'));
+
 
 
 // Not-found handler

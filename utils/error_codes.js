@@ -10,4 +10,5 @@ module.exports = {
 , FILE_TOO_LARGE: "4"
 , FILE_TYPE_NOT_ACCEPTED: "5"
 , NOT_ALBUM_OWNER: "6"
+, NOT_ALBUM_AUTHORIZED: "7"
 };

@@ -126,6 +126,20 @@ async function addMedia(fileList, albumID, userID) {
 }
 
 
+// Returns a list of media objects given an album ID (or an empty list if none found)
+async function getMediaByAlbumID(albumID) {
+  if (typeof(albumID) === 'number' && albumID > -1) {
+    let results = await db.select('media_file', 'media_caption').from('media').where('album_id', albumID);
+    if (results && results.length) {
+      return results;
+    }
+  }
+
+  return [];
+};
+
+
 module.exports = {
   addMedia
+, getMediaByAlbumID
 };
