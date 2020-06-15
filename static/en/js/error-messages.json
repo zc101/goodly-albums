@@ -4,4 +4,5 @@
 , "Error: Too many files"
 , "Error: One or more files are too large"
 , "Error: One or more file types were not accepted"
-, "Error: You're not currently the owner of this album" ]
+, "Error: You're not currently the owner of this album"
+, "Error: You're not currently authorized to view this album" ]

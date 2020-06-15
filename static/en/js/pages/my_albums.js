@@ -18,11 +18,13 @@ function loadAlbums(cb) {
       // 'Delete' button
       var card = '<div class="card"><button class="btn album-delete-btn" data-toggle="modal" data-target="#confirm-delete-modal" data-album-name="' + album.album_name + '" data-album-id="' + String(album.album_id) + '">&times;</button>';
 
-      // Album cover
+      // Album cover and viewer link
+      card = card + '<a href="/en/view_album.html?album_id=' + album.album_id + '">';
       if (album.album_cover)
         card = card + '<img src="' + album.album_cover + '" class="card-img-top" alt="Album thumbnail">';
       else
         card = card + '<div class="empty-cover">(No Preview Available)</div>';
+      card = card + '</a>';
 
       // Editable album name and description
       card = card + '<div class="card-body"><input type="text" class="form-control border rounded mb-2" id="album_' + album.album_id + '_name" minlength="5" maxlength="30" pattern="[a-zA-Z0-9]([_|\'|`|-|:|\(|\)| ]|[a-zA-Z0-9]){3,28}[a-zA-Z0-9]" placeholder="Album name" value="' + album.album_name + '">';
