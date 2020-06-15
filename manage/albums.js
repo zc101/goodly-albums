@@ -85,12 +85,13 @@ async function isAlbumOwnedByUserID(albumID, userID) {
 };
 
 
-// Return a boolean value indicating whether the given user ID owns a given album ID
+// Return a boolean value indicating whether the given user ID can access the given album ID
+// I.e., either they are the owner, or the album is public
 async function isAlbumAccessibleToUserID(albumID, userID) {
-  if (typeof(albumID) === 'number' && albumID > -1 && typeof(userID) === 'number' && userID > -1) {
+  if (typeof(albumID) === 'number' && albumID > -1) {
     let results = await db.select('owner_id', 'album_private').from('albums').where('album_id', albumID);
     if (results && results.length) {
-      if (results[0].owner_id === userID || !(results[0].album_private))
+      if (!(results[0].album_private) || userID === results[0].owner_id)
         return true;
     }
   }

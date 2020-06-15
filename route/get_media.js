@@ -8,7 +8,9 @@ const mediamgr = baseRequire('manage/media');
 
 module.exports = async function (req, res) {
   let albumID = parseInt((req.body && req.body.album_id) || req.query.album_id);
-  let userID = res.locals.cookieTokens.auth_token.userID;
+  let userID = null;
+  if (res.locals.cookieTokens && res.locals.cookieTokens.auth_token)
+    userID = res.locals.cookieTokens.auth_token.userID;
 
   let authorized = await albummgr.isAlbumAccessibleToUserID(albumID, userID);
   if (authorized) {

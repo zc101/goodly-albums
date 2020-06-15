@@ -11,13 +11,13 @@ function loadAlbums() {
     var newContents = '';
     for (var i = 0; i < data.length; ++i) {
       var album = data[i];
-      var card = '<div class="card">';
+
+      var card = '<div class="card"><a href="/en/view_album.html?album_id=' + album.album_id + '">';
       if (album.album_cover)
         card = card + '<img src="' + album.album_cover + '" class="card-img-top" alt="Album thumbnail">';
       else
         card = card + '<div class="empty-cover">(No Preview Available)</div>';
-
-      card = card + '<div class="card-body"><h5 class="card-title">' + album.album_name + '</h5>';
+      card = card + '</a><div class="card-body"><h5 class="card-title">' + album.album_name + '</h5>';
 
       if (album.album_desc)
         card = card + '<p class="card-text">' + album.album_desc + '</p>';

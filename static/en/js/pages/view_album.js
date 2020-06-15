@@ -30,7 +30,7 @@ function addEventHandlers() {
 
 
 function refreshMedia(cb) {
-  requestJSON("/en/srv/secure/get_media?album_id=" + albumID, function(data) {
+  requestJSON("/en/srv/get_media?album_id=" + albumID, function(data) {
     var newContents = '';
     for (var i = 0; i < data.length; ++i) {
       // Stretch TODO: Support other media besides images (i.e., videos)
