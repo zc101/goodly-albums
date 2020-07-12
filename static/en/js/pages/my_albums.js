@@ -21,7 +21,7 @@ function loadAlbums(cb) {
       // Album cover and viewer link
       card = card + '<a href="/en/view_album.html?album_id=' + album.album_id + '">';
       if (album.album_cover)
-        card = card + '<img src="' + album.album_cover + '" class="card-img-top" alt="Album thumbnail">';
+        card = card + '<img src="/media/' + album.album_cover + '" class="card-img-top" alt="Album thumbnail">';
       else
         card = card + '<div class="empty-cover">(No Preview Available)</div>';
       card = card + '</a>';
