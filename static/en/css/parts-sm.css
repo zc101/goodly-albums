@@ -104,6 +104,14 @@ main {
   border: 2px solid #2a2d34;
 }
 
+#media-popout {
+  padding: 1px;
+}
+
+.media-popout-btn {
+  cursor: pointer;
+}
+
 .media-caption {
   max-height: 3.5rem;
   padding: 5px;

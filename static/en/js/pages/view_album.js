@@ -28,6 +28,11 @@ function addEventHandlers(isOwner) {
       checkUploads();
     });
   }
+
+  // Handle media popouts (just copy button inner imgs to the popout body)
+  $('.media-popout-btn').click(function () {
+    $('#media-popout').html($(this).html());
+  });
 }
 
 
@@ -42,7 +47,7 @@ function refreshMedia(cb) {
       // Stretch TODO: Support other media besides images (i.e., videos)
       var mediaFile = mediaDir + '/' + media[i].media_file;
       var mediaCaption = media[i].media_caption;
-      var card = '<div class="card"><img src="' + mediaFile + '" class="card-img-top" alt="Album thumbnail">';
+      var card = '<div class="card"><div class="media-popout-btn" data-toggle="modal" data-target="#media-popout-modal"><img src="' + mediaFile + '" class="card-img-top" alt="Album thumbnail"></div>';
 
       // 'Delete' button
       // var card = '<div class="card"><button class="btn album-delete-btn" data-toggle="modal" data-target="#confirm-delete-modal" data-album-name="' + album.album_name + '" data-album-id="' + String(albumID) + '">&times;</button>';
