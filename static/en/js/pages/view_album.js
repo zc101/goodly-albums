@@ -11,21 +11,23 @@ var albumID = parseInt(params.get('album_id'));
 var mediaUploadCard = '<div class="card"><form id="media-upload" action="/en/srv/secure/upload_media" method="post" enctype="multipart/form-data"><div class="card-body"><h5 class="card-title">Upload Media</h5><input id="media-album-id" type="hidden" name="album_id" /><label for="media-files">Select up to 10 photos to upload to this album (max 10MB each).</label><input id="media-files" type="file" name="media" multiple /></div><div class="card-footer"><input id="media-submit" type="submit" class="btn btn-sm btn-themed shadow-sm w-100" value="Submit" /></div></form></div>';
 var nothingHereMsg = '<div class="placeholder-msg">Nothing has been added to this album yet; please check back later!</div>';
 
-function addEventHandlers() {
-  // Add album ID to upload form
-  $('#media-album-id')[0].value = albumID;
+function addEventHandlers(isOwner) {
+  if (isOwner) {
+    // Add album ID to upload form
+    $('#media-album-id')[0].value = albumID;
 
-  // Handle media upload form
-  $('#media-submit')[0].addEventListener('click', function () {
-    alertMessage('Uploading...', 'primary');
-  });
+    // Handle media upload form
+    $('#media-submit')[0].addEventListener('click', function () {
+      alertMessage('Uploading...', 'primary');
+    });
 
-  listenForMultipartSubmit('#media-upload', function () {
-    $('#media-upload')[0].reset();
-  //  alertMessage('Processing...', 'primary');
-  //  setTimeout(checkUploads, 500);
-    checkUploads();
-  });
+    listenForMultipartSubmit('#media-upload', function () {
+      $('#media-upload')[0].reset();
+      //  alertMessage('Processing...', 'primary');
+      //  setTimeout(checkUploads, 500);
+      checkUploads();
+    });
+  }
 }
 
 
@@ -58,7 +60,7 @@ function refreshMedia(cb) {
       $("#media-list").html(nothingHereMsg);
     else {
       $("#media-list").html(newContents);
-      addEventHandlers();
+      addEventHandlers(data.isOwner);
     }
     $("#alert_msg").setAlertClass("hidden");
     if (typeof(cb) === 'function')
