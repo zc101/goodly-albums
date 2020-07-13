@@ -104,6 +104,16 @@ main {
   border: 2px solid #2a2d34;
 }
 
+.media-caption {
+  max-height: 3.5rem;
+  padding: 5px;
+  overflow: auto;
+}
+
+.media-caption-editable {
+  
+}
+
 .empty-cover {
   display: flex;
   height: 144px;

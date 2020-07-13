@@ -49,10 +49,10 @@ function refreshMedia(cb) {
 
       // Media caption (editable if owner)
       if (data.isOwner)
-        card = card + '<textarea class="form-control border rounded media-caption" data-media="' + media[i].media_file + '" rows="2">' + (mediaCaption || '') + '</textarea>';
+        card = card + '<textarea class="form-control border rounded media-caption-editable" data-media="' + media[i].media_file + '" rows="2">' + (mediaCaption || '') + '</textarea>';
       else {
         if (mediaCaption)
-          card = card + '<div class="card-body">' + mediaCaption + '</div>';
+          card = card + '<div class="card-body media-caption">' + mediaCaption + '</div>';
       }
 
       // 'Save' button
