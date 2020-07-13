@@ -41,19 +41,24 @@ function refreshMedia(cb) {
     for (var i = 0; i < media.length; ++i) {
       // Stretch TODO: Support other media besides images (i.e., videos)
       var mediaFile = mediaDir + '/' + media[i].media_file;
+      var mediaCaption = media[i].media_caption;
       var card = '<div class="card"><img src="' + mediaFile + '" class="card-img-top" alt="Album thumbnail">';
 
       // 'Delete' button
       // var card = '<div class="card"><button class="btn album-delete-btn" data-toggle="modal" data-target="#confirm-delete-modal" data-album-name="' + album.album_name + '" data-album-id="' + String(albumID) + '">&times;</button>';
 
-      // Editable media caption
-      card = card + '<div class="card-body">';
-      // '<textarea class="form-control border rounded mb-2" id="album_' + albumID + '_desc" rows="2">' + (data[i].media_caption || '') + '</textarea>';
+      // Media caption (editable if owner)
+      if (data.isOwner)
+        card = card + '<textarea class="form-control border rounded media-caption" data-media="' + media[i].media_file + '" rows="2">' + (mediaCaption || '') + '</textarea>';
+      else {
+        if (mediaCaption)
+          card = card + '<div class="card-body">' + mediaCaption + '</div>';
+      }
 
       // 'Save' button
       // card = card + '</div><div class="card-footer d-flex justify-content-around"><button class="btn btn-sm shadow-sm btn-themed flex-fill w-100 mr-1" data-album-id="' + String(albumID) + '" onclick="saveAlbumDetails(this)">Save</button>';
 
-      newContents = newContents + card + '</div></div>';
+      newContents = newContents + card + '</div>';
     }
 
     if (newContents.length === 0)

@@ -11,6 +11,14 @@
   <link rel="stylesheet" href="/en/css/main.css">
   <link rel="icon" href="favicon.ico">
 
+  <style>
+    .card-body {
+      max-height: 3.5rem;
+      padding: 5px;
+      overflow: auto;
+    }
+  </style>
+
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="/en/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
@@ -46,8 +54,7 @@
   <div class="content">
     <div id="alert_msg" class="mb-0 alert alert-primary" role="alert">Loading...</div>
     <main>
-      <div id="media-list" class="card-deck">
-      </div>
+      <div id="media-list" class="card-deck align-items-start"></div>
     </main>
     <footer><script>$("footer").load("/en/parts/footer.html");</script></footer>
   </div>
