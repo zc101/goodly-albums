@@ -47,19 +47,6 @@
     <div id="alert_msg" class="mb-0 alert alert-primary" role="alert">Loading...</div>
     <main>
       <div id="media-list" class="card-deck">
-        <div class="card">
-          <form id="media-upload" action="/en/srv/secure/upload_media" method="post" enctype="multipart/form-data">
-            <div class="card-body">
-              <h5 class="card-title">Upload Media</h5>
-              <input id="media-album-id" type="hidden" name="album_id" />
-              <label for="media-files">Select up to 10 photos to upload to this album (max 10MB each).</label>
-              <input id="media-files" type="file" name="media" multiple />
-            </div>
-            <div class="card-footer">
-              <input id="media-submit" type="submit" class="btn btn-sm btn-themed shadow-sm w-100" value="Submit" />
-            </div>
-          </form>
-        </div>
       </div>
     </main>
     <footer><script>$("footer").load("/en/parts/footer.html");</script></footer>

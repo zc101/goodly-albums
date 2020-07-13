@@ -81,6 +81,12 @@ main {
   z-index: 0;
 }
 
+.placeholder-msg {
+  margin-top: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
 /* Used for lists of both albums and album media */
 .content .card-deck {
   padding: 0 5px 5px 5px;

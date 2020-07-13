@@ -3,13 +3,13 @@
 'use strict';
 
 // Shared variables
-var baseContents = $("#media-list").html();
 var mediaDir = '/media';
 var deletingMediaName = null;
 var deletingMediaAlbumID = null;
 var params = new URLSearchParams(window.location.search);
 var albumID = parseInt(params.get('album_id'));
-
+var mediaUploadCard = '<div class="card"><form id="media-upload" action="/en/srv/secure/upload_media" method="post" enctype="multipart/form-data"><div class="card-body"><h5 class="card-title">Upload Media</h5><input id="media-album-id" type="hidden" name="album_id" /><label for="media-files">Select up to 10 photos to upload to this album (max 10MB each).</label><input id="media-files" type="file" name="media" multiple /></div><div class="card-footer"><input id="media-submit" type="submit" class="btn btn-sm btn-themed shadow-sm w-100" value="Submit" /></div></form></div>';
+var nothingHereMsg = '<div class="placeholder-msg">Nothing has been added to this album yet; please check back later!</div>';
 
 function addEventHandlers() {
   // Add album ID to upload form
@@ -31,10 +31,14 @@ function addEventHandlers() {
 
 function refreshMedia(cb) {
   requestJSON("/en/srv/get_media?album_id=" + albumID, function(data) {
-    var newContents = '';
-    for (var i = 0; i < data.length; ++i) {
+    if (data.isOwner) // Add the "Upload Media" box
+      var newContents = mediaUploadCard;
+    else
+      var newContents = '';
+    var media = data.media;
+    for (var i = 0; i < media.length; ++i) {
       // Stretch TODO: Support other media besides images (i.e., videos)
-      var mediaFile = mediaDir + '/' + data[i].media_file;
+      var mediaFile = mediaDir + '/' + media[i].media_file;
       var card = '<div class="card"><img src="' + mediaFile + '" class="card-img-top" alt="Album thumbnail">';
 
       // 'Delete' button
@@ -50,9 +54,13 @@ function refreshMedia(cb) {
       newContents = newContents + card + '</div></div>';
     }
 
-    $("#media-list").html(baseContents + newContents);
+    if (newContents.length === 0)
+      $("#media-list").html(nothingHereMsg);
+    else {
+      $("#media-list").html(newContents);
+      addEventHandlers();
+    }
     $("#alert_msg").setAlertClass("hidden");
-    addEventHandlers();
     if (typeof(cb) === 'function')
       cb();
   });
